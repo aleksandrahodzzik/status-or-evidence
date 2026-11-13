@@ -19,6 +19,10 @@ Status: done. Primary model `runs/full_muse-spark-1.3-contributor_both_20261113T
 `runs/full_muse-spark-1.3_with_nsc_20261113T204207-234323Z`; write-up and figures in `docs/REPORT.md`. Total API
 spend $7.73.
 
+Interactive results: open `site/index.html` in a browser (no server or internet needed). It shows every condition
+with 95% intervals, the "same source, different messenger" comparison, and a reader for all 2,906 recorded answers.
+`make site` (`python tools/build_site.py`) rebuilds `site/data.js` from the two runs.
+
 ## Setup (Windows, PowerShell)
 
 ```powershell
@@ -54,7 +58,8 @@ of anything already done is served from `cache/` at $0.
   `prompts.py`, `targets.py`, `parse.py`, `run.py` (CLI), `wild.py`, `analyze.py`.
 - `runs/<run_id>/raw.jsonl` + `meta.json`; `runs/wild/`; `budget/ledger.jsonl` (one line per real call).
 - `docs/DATA_INVENTORY.md` (Step 0, Plan A, source table), `docs/WILD.md` (in-the-wild counts).
-- `tools/`: one-off inventory and copy scripts (read-only on MuseCell).
+- `tools/`: one-off inventory and copy scripts (read-only on MuseCell), `build_pdf.py`, `build_site.py`.
+- `site/`: static interactive results page (`index.html`, `style.css`, `app.js`, generated `data.js`).
 
 ## Design decisions and assumptions
 

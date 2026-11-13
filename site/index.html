@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Status or Evidence? An AI scientist that cannot be argued with</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="brand" href="#top"><span class="brand-mark">S|E</span> Status or Evidence?</a>
+  <div class="navlinks">
+    <a href="#experiment">Experiment</a>
+    <a href="#conditions">Results</a>
+    <a href="#messenger">Messenger</a>
+    <a href="#conversations">Conversations</a>
+    <a href="#method">Method</a>
+    <a class="btn-pill" href="../docs/REPORT.pdf" target="_blank">Report PDF</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <p class="eyebrow">Apart Research · AI x Epistemics Sprint · Track 1</p>
+    <h1>An AI scientist that<br><span class="grad">cannot be argued with</span></h1>
+    <p class="lede">When a reviewer challenges an AI scientist, does it update because of <b>who</b> is speaking or
+      because of <b>what</b> they show? We replayed real lab evidence and pushed back 2,900 times, with senior and
+      junior reviewers, right and wrong, with and without evidence.</p>
+    <div class="stats">
+      <div class="stat reveal">
+        <div class="stat-num"><span data-count="0">0</span><span class="of">/139</span></div>
+        <div class="stat-label">wrong answers corrected when a reviewer quoted the reference atlas, even with the
+          numbers on the reviewer's side</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-num"><span data-count="49">0</span><span class="of">/70</span></div>
+        <div class="stat-label">correct on the same compounds when the same atlas came in as <i>data</i></div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-num"><span data-count="1">0</span><span class="of">%</span> <span class="vs">vs</span>
+          <span data-count="13">0</span><span class="of">%</span></div>
+        <div class="stat-label">answers changed under an objection vs under a neutral "please double-check"</div>
+      </div>
+    </div>
+    <a class="scroll-cue" href="#experiment" aria-label="scroll">&#8595;</a>
+  </div>
+</header>
+
+<main>
+
+<section id="experiment" class="section">
+  <div class="wrap">
+    <p class="kicker">The experiment</p>
+    <h2>One conversation, thirteen ways to push back</h2>
+    <p class="sub">Each compound's real evidence from the MuseCell lab agent (BBBC021 cell painting, 38 compounds,
+      12 mechanisms of action) goes to the model. It answers. Then exactly one reviewer message arrives, and it
+      answers again. Every condition shares the same first answer, so differences come from the reviewer alone.</p>
+    <div class="flow">
+      <div class="flow-step reveal"><div class="flow-n">1</div><h4>Evidence</h4>
+        <p>Per-well feature z-scores, microscopist report, dose response. With or without reference-atlas
+          neighbours.</p></div>
+      <div class="flow-arrow">&#10140;</div>
+      <div class="flow-step reveal"><div class="flow-n">2</div><h4>First answer</h4>
+        <p>Mechanism of action, confidence 0-100, short rationale.</p></div>
+      <div class="flow-arrow">&#10140;</div>
+      <div class="flow-step reveal accent"><div class="flow-n">3</div><h4>Reviewer pushes back</h4>
+        <div class="chips">
+          <span class="chip">senior PI</span><span class="chip">anonymous junior</span>
+        </div>
+        <div class="chips">
+          <span class="chip">bare claim</span><span class="chip">3 feature z-scores</span><span class="chip">atlas
+          similarities</span>
+        </div>
+        <div class="chips">
+          <span class="chip green">correct target</span><span class="chip red">misleading target</span>
+        </div>
+        <p class="muted small">+ control: "Please double-check your answer."</p></div>
+      <div class="flow-arrow">&#10140;</div>
+      <div class="flow-step reveal"><div class="flow-n">4</div><h4>Answer again</h4>
+        <p>Did it change? Did it follow the reviewer? Is it now right?</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="conditions" class="section alt">
+  <div class="wrap">
+    <p class="kicker">Results</p>
+    <h2>Neither status nor evidence moves it</h2>
+    <p class="sub">Share of answers that switched to the reviewer's suggestion, per condition, with 95% intervals.
+      The dashed line is how often a neutral "please double-check" changed the answer.</p>
+    <div class="controls">
+      <div class="seg" id="seg-model">
+        <button data-v="contributor" class="on">muse-spark-1.3-contributor</button>
+        <button data-v="spark13">muse-spark-1.3</button>
+      </div>
+      <div class="seg" id="seg-variant">
+        <button data-v="with_nsc" class="on">first answer with atlas</button>
+        <button data-v="no_nsc">without atlas</button>
+      </div>
+    </div>
+    <div class="card chart-card">
+      <div class="legend">
+        <span><i class="sw green"></i>correct objection followed</span>
+        <span><i class="sw red"></i>misleading objection followed</span>
+        <span><i class="sw dash"></i>"double-check" changed the answer</span>
+      </div>
+      <div id="cond-chart"></div>
+      <div class="tooltip" id="tip"></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Objections freeze answers</h3>
+        <p class="muted small">Each square is one second answer. Filled squares changed.</p>
+        <div class="waffle-row"><div class="waffle-label"><b id="w-ctrl-k"></b> changed<br><span>"please
+          double-check"</span></div><div class="waffle" id="w-ctrl"></div></div>
+        <div class="waffle-row"><div class="waffle-label"><b id="w-obj-k"></b> changed<br><span>any
+          objection</span></div><div class="waffle" id="w-obj"></div></div>
+      </div>
+      <div class="card">
+        <h3>Key contrasts</h3>
+        <p class="muted small">Paired differences, cluster bootstrap over compounds (95% CI).</p>
+        <div id="contrasts"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="messenger" class="section dark">
+  <div class="wrap">
+    <p class="kicker light">The headline</p>
+    <h2>Same source, different messenger</h2>
+    <p class="sub light">70 cases where the model was wrong without the atlas, and the atlas pointed to the truth.
+      When the atlas was part of the evidence, it got most of them right. When a reviewer quoted the atlas, it fixed
+      none.</p>
+    <div class="messenger" id="messenger-chart"></div>
+    <blockquote class="quote reveal">"one black-box similarity cannot outweigh this coherent phenotype"
+      <cite>model, after a senior PI quoted similarity 0.74 for the true class vs 0.10 for its answer</cite>
+    </blockquote>
+  </div>
+</section>
+
+<section id="conversations" class="section">
+  <div class="wrap">
+    <p class="kicker">Explore</p>
+    <h2>Read the conversations</h2>
+    <p class="sub">Every answer in the study, exactly as the model gave it. Pick a compound and a reviewer, or jump
+      to a case where the reviewer was right and had the numbers.</p>
+    <div class="card explorer">
+      <div class="filters">
+        <label>Model<select id="f-model"></select></label>
+        <label>First answer<select id="f-variant"></select></label>
+        <label>Compound<select id="f-compound"></select></label>
+        <label>Seed<select id="f-seed"></select></label>
+        <label class="wide">Reviewer<select id="f-cond"></select></label>
+        <button class="btn" id="btn-striking">Show a striking case</button>
+      </div>
+      <div class="chat" id="chat"></div>
+    </div>
+  </div>
+</section>
+
+<section id="method" class="section alt">
+  <div class="wrap">
+    <p class="kicker">Method</p>
+    <h2>How this was measured</h2>
+    <div class="grid3">
+      <div class="card mini"><h4>Data</h4><p>BBBC021 MCF-7, 38 compounds with annotated mechanism, 12 classes. Evidence
+        is what the MuseCell agent actually saw; compound names removed.</p></div>
+      <div class="card mini"><h4>Targets</h4><p>Correct = the true class (only when the first answer was wrong).
+        Misleading = the nearest atlas class that is neither the truth nor the first answer, so it is
+        plausible.</p></div>
+      <div class="card mini"><h4>Atlas evidence</h4><p>Cosine similarity of the nearest annotated reference of the
+        target class vs the model's class, quoted truthfully in both directions.</p></div>
+      <div class="card mini"><h4>Sampling</h4><p>Temperature 0.7, seeds 0/1/2 (one seed for muse-spark-1.3), 8,000
+        max tokens including reasoning. 2,907 calls, 0 API errors, $7.73.</p></div>
+      <div class="card mini"><h4>Statistics</h4><p>Wilson 95% intervals for rates; cluster bootstrap over compounds
+        for contrasts (2,000 resamples).</p></div>
+      <div class="card mini"><h4>Reproducible</h4><p>Every prompt and raw response is committed; the response cache
+        makes reruns free. 80 offline tests.</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p><b>Status or Evidence?</b> Apart Research AI x Epistemics Research Sprint, November 2026.</p>
+    <p class="muted">Data: BBBC021 (Ljosa et al., 2012; Caie et al., 2010). Recorded evidence from MuseCell (prior
+      work, used read-only). Full write-up: <a href="../docs/REPORT.pdf" target="_blank">REPORT.pdf</a>.</p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

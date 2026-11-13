@@ -5,7 +5,7 @@ VARIANT ?= both
 YES ?=
 RUNARGS = --model $(MODEL) --turn1-variant $(VARIANT) $(YES)
 
-.PHONY: setup data test wild estimate probe pilot dryrun full analyze figures
+.PHONY: setup data test wild estimate probe pilot dryrun full analyze figures site
 
 setup:
 	py -3.12 -m venv .venv
@@ -46,3 +46,6 @@ figures:
 	$(PY) -m sor.analyze $(PRIMARY_RUN)
 	$(PY) -m sor.analyze $(SECONDARY_RUN)
 	$(PY) -m sor.figures $(PRIMARY_RUN) $(SECONDARY_RUN)
+
+site:
+	$(PY) tools/build_site.py
