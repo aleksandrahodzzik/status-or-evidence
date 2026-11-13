@@ -1,0 +1,10 @@
+{
+ "built_at": "2026-10-30T16:35:23+00:00",
+ "model": "torchvision resnet50 IMAGENET1K_V2, global average pool, per channel (dna, tubulin, actin), 512 px",
+ "tvn_components": 212,
+ "tvn_variance_kept": 0.99,
+ "dmso_wells": 330,
+ "wells": 1228,
+ "treatments": 304,
+ "annotated": 103
+}

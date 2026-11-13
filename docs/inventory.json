@@ -1,0 +1,153 @@
+{
+ "coverage": [
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v1-v4 (no agent field)",
+   "scientist": "meta-models/muse-spark-open-1026",
+   "budget": 4,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 35
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v1-v4 (no agent field)",
+   "scientist": "muse-spark-1.3-contributor",
+   "budget": 2,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 38
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v1-v4 (no agent field)",
+   "scientist": "muse-spark-1.3-contributor",
+   "budget": 4,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 38
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v1-v4 (no agent field)",
+   "scientist": "muse-spark-1.3-contributor",
+   "budget": 6,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 36
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v2",
+   "scientist": "meta-models/muse-spark-open-1026",
+   "budget": 4,
+   "rows": 19,
+   "with_transcript": 19,
+   "finished": 17
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v3",
+   "scientist": "meta-models/muse-spark-open-1026",
+   "budget": 4,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 37
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v4",
+   "scientist": "meta-models/muse-spark-open-1026",
+   "budget": 4,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 38
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v5",
+   "scientist": "meta-models/muse-spark-open-1026",
+   "budget": 4,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 38
+  },
+  {
+   "index": "agent_runs.jsonl",
+   "agent": "v5",
+   "scientist": "muse-spark-1.3",
+   "budget": 4,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 38
+  },
+  {
+   "index": "open_world_runs.jsonl",
+   "agent": "v5-open",
+   "scientist": "muse-spark-1.3",
+   "budget": 4,
+   "rows": 38,
+   "with_transcript": 38,
+   "finished": 38
+  }
+ ],
+ "orphans": [
+  "run_022fd8765474",
+  "run_064f9665b23c",
+  "run_0d9f5361415e",
+  "run_0f1c579db128",
+  "run_19a73782d521",
+  "run_19b4ee810120",
+  "run_206290f4c32e",
+  "run_28741bf84211",
+  "run_2bee8860f390",
+  "run_2cf7269f52e8",
+  "run_34727e562963",
+  "run_39e2d32f1edc",
+  "run_52ee6033f561",
+  "run_547d8da4e7bd",
+  "run_64e9e01ca04e",
+  "run_78be77167c4d",
+  "run_87e2787d1f1e",
+  "run_92e68fe0de6a",
+  "run_93391a0830e0",
+  "run_9876e02edb19",
+  "run_9afbd903a2d2",
+  "run_9e6a6992bee3",
+  "run_a41c95a37620",
+  "run_aa63c5d885aa",
+  "run_c1d73af89f4d",
+  "run_cae9422218ee",
+  "run_d0ac09c89956",
+  "run_d5a53adc9c63",
+  "run_d63dfed2132a",
+  "run_dbac3d1d8a6e",
+  "run_dbfe652a8a01"
+ ],
+ "compounds_with_transcript": 38,
+ "per_group_compounds": {
+  "v1-v4 (no agent field) | muse-spark-1.3-contributor": 38,
+  "v1-v4 (no agent field) | meta-models/muse-spark-open-1026": 35,
+  "v2 | meta-models/muse-spark-open-1026": 17,
+  "v3 | meta-models/muse-spark-open-1026": 37,
+  "v4 | meta-models/muse-spark-open-1026": 38,
+  "v5 | meta-models/muse-spark-open-1026": 38,
+  "v5 | muse-spark-1.3": 38,
+  "v5-open | muse-spark-1.3": 38
+ },
+ "moas": [
+  "Actin disruptors",
+  "Aurora kinase inhibitors",
+  "Cholesterol-lowering",
+  "DNA damage",
+  "DNA replication",
+  "Eg5 inhibitors",
+  "Epithelial",
+  "Kinase inhibitors",
+  "Microtubule destabilizers",
+  "Microtubule stabilizers",
+  "Protein degradation",
+  "Protein synthesis"
+ ],
+ "n_compounds": 38
+}
