@@ -1,0 +1,40 @@
+{
+ "run_id": "dryrun_muse-spark-1.3-contributor_both_20261113T174410-115322Z",
+ "command": "dryrun",
+ "model": "muse-spark-1.3-contributor",
+ "variants": [
+  "with_nsc",
+  "no_nsc"
+ ],
+ "seeds": [
+  0
+ ],
+ "compounds": [
+  "s_01943ff958",
+  "s_07f98c80cd",
+  "s_0ed866d71e"
+ ],
+ "args": {
+  "turn1_variant": "both",
+  "yes": true
+ },
+ "temperature": 0.7,
+ "max_tokens": 8000,
+ "send_seed": true,
+ "send_temperature": true,
+ "reasoning_effort": null,
+ "base_url": "https://api.meta.ai/v1",
+ "git_commit": "1568ef1",
+ "started": "2026-11-13T17:44:10+00:00",
+ "status": "done",
+ "finished": "2026-11-13T17:46:21+00:00",
+ "counts": {
+  "calls": 48,
+  "cached": 6,
+  "errors": 0,
+  "skipped": 12,
+  "unparsed": 0
+ },
+ "cost_usd_this_run": 0.032208,
+ "ledger_total_usd": 0.089352
+}
