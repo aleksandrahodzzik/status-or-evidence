@@ -28,7 +28,7 @@ request_timeout_s: 180
 max_retries: 4
 
 estimate:
-  expected_output_tokens: 1500      # MuseCell ledger: Spark decision turns, mean ~1.0-1.5k incl. reasoning
+  expected_output_tokens: 2600      # pilot (contributor, turn 1): mean 2463 with_nsc / 2700 no_nsc incl. reasoning
   input_token_margin: 1.15          # local tokenizer is a proxy for the Meta tokenizer
   turn1_answer_tokens: 120          # visible JSON answer carried into turn 2
 
