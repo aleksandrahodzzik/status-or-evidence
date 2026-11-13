@@ -1,0 +1,148 @@
+{
+ "transcript_counts": {
+  "all (both index files)": {
+   "requests": 115,
+   "changed": 36,
+   "W->R": 15,
+   "R->W": 1,
+   "W->W": 20,
+   "kept": 79
+  },
+  "agent_runs.jsonl only": {
+   "requests": 101,
+   "changed": 30,
+   "W->R": 14,
+   "R->W": 1,
+   "W->W": 15,
+   "kept": 71
+  },
+  "open_world_runs.jsonl only": {
+   "requests": 14,
+   "changed": 6,
+   "W->R": 1,
+   "R->W": 0,
+   "W->W": 5,
+   "kept": 8
+  },
+  "v1 | meta-models/muse-spark-open-1026": {
+   "requests": 21,
+   "changed": 8,
+   "W->R": 5,
+   "R->W": 0,
+   "W->W": 3,
+   "kept": 13
+  },
+  "v1 | muse-spark-1.3-contributor": {
+   "requests": 46,
+   "changed": 12,
+   "W->R": 3,
+   "R->W": 0,
+   "W->W": 9,
+   "kept": 34
+  },
+  "v2 | meta-models/muse-spark-open-1026": {
+   "requests": 4,
+   "changed": 2,
+   "W->R": 1,
+   "R->W": 0,
+   "W->W": 1,
+   "kept": 2
+  },
+  "v3 | meta-models/muse-spark-open-1026": {
+   "requests": 14,
+   "changed": 5,
+   "W->R": 3,
+   "R->W": 0,
+   "W->W": 2,
+   "kept": 9
+  },
+  "v4 | meta-models/muse-spark-open-1026": {
+   "requests": 10,
+   "changed": 3,
+   "W->R": 2,
+   "R->W": 1,
+   "W->W": 0,
+   "kept": 7
+  },
+  "v5 | meta-models/muse-spark-open-1026": {
+   "requests": 2,
+   "changed": 0,
+   "W->R": 0,
+   "R->W": 0,
+   "W->W": 0,
+   "kept": 2
+  },
+  "v5 | muse-spark-1.3": {
+   "requests": 4,
+   "changed": 0,
+   "W->R": 0,
+   "R->W": 0,
+   "W->W": 0,
+   "kept": 4
+  },
+  "v5-open | muse-spark-1.3": {
+   "requests": 14,
+   "changed": 6,
+   "W->R": 1,
+   "R->W": 0,
+   "W->W": 5,
+   "kept": 8
+  }
+ },
+ "index_counts": {
+  "index-only, both files": {
+   "requests": 115,
+   "changed": 42,
+   "W->R": 18,
+   "R->W": 2,
+   "W->W": 22,
+   "kept": 73
+  },
+  "index-only, agent_runs.jsonl": {
+   "requests": 101,
+   "changed": 36,
+   "W->R": 17,
+   "R->W": 2,
+   "W->W": 17,
+   "kept": 65
+  },
+  "index-only, agent_runs.jsonl, finished": {
+   "requests": 98,
+   "changed": 34,
+   "W->R": 17,
+   "R->W": 1,
+   "W->W": 16,
+   "kept": 64
+  }
+ },
+ "review_events": {
+  "reviews_approve": 242,
+  "reviews_request_experiment": 115
+ },
+ "index_first_moa_vs_transcript_before_mismatches": 0,
+ "confounds": {
+  "changed_with_new_well": 0,
+  "changed_without_new_well": 36,
+  "kept_with_new_well": 0,
+  "requests_with_budget_left": 0,
+  "changed_with_any_new_tool_result": 36,
+  "revised_without_change": 70,
+  "tool_results_after_review_in_changed": {
+   "compare_to_reference_atlas": 31,
+   "update_hypotheses": 37,
+   "submit_conclusion": 36,
+   "describe_phenotype": 15,
+   "dose_response": 38
+  },
+  "v5_requests": 6,
+  "v5_scientist_changed_but_protocol_final": 0
+ },
+ "user_quick_count": {
+  "requests": 99,
+  "changed": 34,
+  "W->R": 17,
+  "R->W": 1,
+  "W->W": 16,
+  "kept": 65
+ }
+}
