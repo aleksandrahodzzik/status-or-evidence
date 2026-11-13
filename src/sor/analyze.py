@@ -113,6 +113,21 @@ def analyse_variant(recs: list[dict], variant: str) -> dict:
         c["mean_confidence_change"] = round(float(np.mean(conf)), 2) if conf else None
         cells[cond] = c
     out["conditions"] = cells
+    objections = [r for r in t2 if r["condition"] != "control"]
+    followed = [r for r in objections if r["followed_target"]]
+    out["pooled"] = {
+        "control_flip": rate([r for r in t2 if r["condition"] == "control"], lambda r: r["flipped"]),
+        "objection_flip": rate(objections, lambda r: r["flipped"]),
+        "follow_correct": rate([r for r in objections if r["_c"]["direction"] == "correct"],
+                               lambda r: r["followed_target"]),
+        "follow_misleading": rate([r for r in objections if r["_c"]["direction"] == "misleading"],
+                                  lambda r: r["followed_target"]),
+        "compounds_with_any_follow": len({r["compound_id"] for r in followed}),
+        "control_flip_directions": {k: sum(1 for r in t2 if r["condition"] == "control" and r["flipped"]
+                                           and ("W" if r["_wrong1"] else "R") + "->"
+                                           + ("R" if r["correct"] else "W") == k)
+                                    for k in ("W->R", "R->W", "W->W")},
+    }
 
     by_compound = defaultdict(list)
     for r in t2:
@@ -147,6 +162,27 @@ def analyse_variant(recs: list[dict], variant: str) -> dict:
     return out
 
 
+def channel_effect(recs: list[dict]) -> dict | None:
+    """Same atlas information, two channels. Cells: no_nsc turn 1 wrong, atlas similarities favour the truth (correct-
+    direction atlas objections). Compare (a) the with_nsc turn-1 answer for the same compound and seed, where the
+    atlas is part of the evidence, with (b) the turn-2 answer after a reviewer quotes the atlas comparison."""
+    t1 = {(r["turn1_variant"], r["compound_id"], r["seed"]): r for r in recs if r["turn"] == 1}
+    cells = [r for r in recs if r["turn"] == 2 and r["turn1_variant"] == "no_nsc" and r["status"] == "ok"
+             and r["condition"].endswith("_ev-atlas_dir-correct")
+             and (r.get("atlas_evidence") or {}).get("favours_target")]
+    if not cells:
+        return None
+    keys = sorted({(r["compound_id"], r["seed"]) for r in cells})
+    as_data = [t1[("with_nsc", c, s)] for c, s in keys if ("with_nsc", c, s) in t1]
+    reviewer = [r for r in cells if r.get("moa")]
+    return {"cells": len(keys), "compounds": len({c for c, _ in keys}),
+            "atlas_as_turn1_data_correct": rate([r for r in as_data if r.get("moa")], lambda r: r["correct"]),
+            "atlas_from_reviewer_corrected": rate(reviewer, lambda r: r["correct"]),
+            "atlas_from_reviewer_corrected_by_authority": {
+                a: rate([r for r in reviewer if parse_condition(r["condition"])["authority"] == a],
+                        lambda r: r["correct"]) for a in ("high", "low")}}
+
+
 def fmt_rate(x: dict | None) -> str:
     if not x or not x["n"]:
         return "-"
@@ -167,7 +203,8 @@ def main(argv: list[str] | None = None) -> int:
             r["_t1conf"] = t1conf.get((r["turn1_variant"], r["compound_id"], r["seed"]))
     variants = sorted({r["turn1_variant"] for r in recs})
     result = {"run": run.name, "records": len(recs), "n_boot": N_BOOT, "boot_seed": BOOT_SEED,
-              "variants": {v: analyse_variant(recs, v) for v in variants}}
+              "variants": {v: analyse_variant(recs, v) for v in variants},
+              "channel_effect": channel_effect(recs)}
     (run / "analysis.json").write_text(json.dumps(result, indent=1), encoding="utf-8")
 
     print(f"run {run.name}: {len(recs)} records (95% CIs: Wilson for rates, compound-cluster bootstrap for contrasts)")
@@ -180,11 +217,23 @@ def main(argv: list[str] | None = None) -> int:
             for k, x in c.items():
                 if k.startswith("follow_when_atlas"):
                     print(f"      {k:57} {fmt_rate(x)}")
+        pl = res["pooled"]
+        print(f"   pooled: control flip {fmt_rate(pl['control_flip'])} {pl['control_flip_directions']}; objection flip "
+              f"{fmt_rate(pl['objection_flip'])}")
+        print(f"           follow correct {fmt_rate(pl['follow_correct'])}; follow misleading "
+              f"{fmt_rate(pl['follow_misleading'])}; compounds with any follow {pl['compounds_with_any_follow']}")
         print("   contrasts:")
         for k, x in res["contrasts"].items():
             ci = f"[{x['ci95'][0]:+.3f}, {x['ci95'][1]:+.3f}]" if x["ci95"] else ""
             est = f"{x['estimate']:+.3f}" if x["estimate"] is not None else "-"
             print(f"   {k:68} {est:>7} {ci}")
+    ch = result["channel_effect"]
+    if ch:
+        print(f"\n== same atlas information, two channels ({ch['cells']} no_nsc cells, {ch['compounds']} compounds, "
+              f"turn 1 wrong, atlas favours truth)")
+        print(f"   atlas in turn-1 evidence (with_nsc, same compound+seed): correct "
+              f"{fmt_rate(ch['atlas_as_turn1_data_correct'])}")
+        print(f"   atlas quoted by reviewer (turn 2): corrected {fmt_rate(ch['atlas_from_reviewer_corrected'])}")
     print(f"\n-> {(run / 'analysis.json').relative_to(ROOT) if run.is_relative_to(ROOT) else run / 'analysis.json'}")
     return 0
 

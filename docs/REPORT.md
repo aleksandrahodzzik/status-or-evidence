@@ -12,10 +12,9 @@ fully paired design: authority (senior PI vs anonymous junior) x evidence (none,
 verifiable reference-atlas similarities) x direction (correct vs misleading), plus a neutral "please double-check"
 control. Across 2,512 calls to `muse-spark-1.3-contributor` (3 seeds, two turn-1 evidence variants), the model
 almost never changes its answer under objection: it followed 5 of 701 correct objections and 6 of 1,355 misleading
-ones. Status had no measurable effect, and neither did evidence. Most strikingly, the same reference-atlas
-information that raises turn-1 accuracy from 27% to 69% when it is part of the evidence corrected **0 of 139**
-wrong answers when a reviewer supplied it, even though in those cells the quoted numbers favoured the reviewer
-(e.g. 0.74 vs 0.10). Objections did not make the model more accurate; they froze it: answers changed in 13% of
+ones. Status had no measurable effect, and neither did evidence. Most strikingly, the reference atlas, which raises
+turn-1 accuracy from 27% to 69% when its results are part of the evidence, corrected **0 of 139** wrong answers
+when a reviewer quoted it, even though in those cells the quoted numbers favoured the reviewer (e.g. 0.74 vs 0.10). Objections did not make the model more accurate; they froze it: answers changed in 13% of
 "double-check" cells but in 1% of objection cells. The failure mode is the opposite of sycophancy: source-dependent
 discounting of evidence, which makes the model's correctness independent of the quality of criticism.
 
@@ -84,8 +83,13 @@ the model falls back on two default classes (Microtubule stabilizers, Aurora kin
 | with atlas | 15/112 = 13% [8, 21] | 10/894 = 1.1% [0.6, 2.0] | 5/210 = 2.4% [1.0, 5.5] | 1/684 = 0.1% [0.0, 0.8] |
 | without atlas | 6/112 = 5% [3, 11] | 5/1162 = 0.4% [0.2, 1.0] | 0/491 = 0% [0, 0.8] | 5/671 = 0.7% [0.3, 1.7] |
 
-Per-condition tables (12 objection cells per variant): `runs/<full run>/analysis.json`. No single objection cell
-exceeds a 6% follow rate.
+![Follow rates per condition](figures/primary_follow.png)
+
+*Figure 1. Share of turn-2 answers that switched to the reviewer's target, per objection cell, and share of answers
+that changed under the control. Bars: 95% Wilson intervals.*
+
+No single objection cell exceeds a 6% follow rate, and the few follows are concentrated in 3 compounds per variant.
+Per-condition tables: `runs/full_muse-spark-1.3-contributor_both_20261113T201055-203204Z/analysis.json`.
 
 ### 3.3 Neither status nor evidence matters
 
@@ -99,12 +103,20 @@ Paired contrasts on the follow rate (cluster bootstrap):
 The model does not discriminate correct from misleading objections because it rejects nearly all of them. Mean
 confidence also barely moves (all cells within ±1.4 points on a 0-100 scale).
 
-### 3.4 The same information, a different messenger
+### 3.4 The same source, a different messenger
 
 In `no_nsc`, 70 (compound, seed) cells (24 compounds) had a wrong turn-1 answer and atlas numbers favouring the
-truth. When the atlas was part of the turn-1 evidence (`with_nsc`, same compound and seed), the model answered
-correctly in 49/70 (70%, 59-80%). When a reviewer supplied the atlas comparison in turn 2, it corrected **0/139**
-(0%, 0-2.7%; 69 senior-PI cells, 70 junior). Typical rationales:
+truth. When the atlas results were part of the turn-1 evidence (`with_nsc`, same compound and seed), the model
+answered correctly in 49/70 (70%, 58-80%). When a reviewer quoted the atlas comparison in turn 2, it corrected
+**0/139** (0%, 0-2.7%; 69 senior-PI cells, 70 junior). The two channels are not identical in content: the turn-1
+atlas block lists per-well nearest neighbours, while the reviewer quotes two similarities. But the reviewer's
+numbers are a direct summary of that block, and they favour the truth in every one of these cells.
+
+![Same source, different messenger](figures/primary_channel.png)
+
+*Figure 2. Accuracy on the 70 cells where the model is wrong without the atlas and the atlas favours the truth.*
+
+Typical rationales:
 
 > Sim 0.74 vs 0.10: "one black-box similarity cannot outweigh this coherent phenotype."
 >
@@ -144,7 +156,11 @@ its own data, i.e. when the evidence came through its own tools.
 - Quoted feature evidence is weak by construction (closest features, not diagnostic ones); atlas evidence is
   stronger but is a single summary number that the model may reasonably distrust without the full ranking.
 - The atlas level was added post hoc (Section 2). Its prompts and targets were fixed before any atlas call.
-- Answers are short JSON with at most 60 words of rationale; the model's hidden reasoning is logged but not analysed.
+- Answers are short JSON with at most 60 words of rationale. The model reasons before answering (about 2,500
+  reasoning tokens per call) but the API returns only the token count, not the text, so we cannot see whether the
+  reviewer's status or numbers were weighed internally.
+- Turn-1 atlas evidence (per-well neighbour lists) is richer than the reviewer's two-number summary, so Section 3.4
+  compares the same source through two channels, not identical text.
 
 ## 6. Reproducibility
 

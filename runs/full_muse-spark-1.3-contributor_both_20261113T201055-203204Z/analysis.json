@@ -473,6 +473,50 @@
      "mean_confidence_change": 0.02
     }
    },
+   "pooled": {
+    "control_flip": {
+     "k": 6,
+     "n": 112,
+     "rate": 0.054,
+     "ci95": [
+      0.025,
+      0.112
+     ]
+    },
+    "objection_flip": {
+     "k": 5,
+     "n": 1162,
+     "rate": 0.004,
+     "ci95": [
+      0.002,
+      0.01
+     ]
+    },
+    "follow_correct": {
+     "k": 0,
+     "n": 491,
+     "rate": 0.0,
+     "ci95": [
+      0.0,
+      0.008
+     ]
+    },
+    "follow_misleading": {
+     "k": 5,
+     "n": 671,
+     "rate": 0.007,
+     "ci95": [
+      0.003,
+      0.017
+     ]
+    },
+    "compounds_with_any_follow": 3,
+    "control_flip_directions": {
+     "W->R": 0,
+     "R->W": 0,
+     "W->W": 6
+    }
+   },
    "contrasts": {
     "authority_high_minus_low_follow": {
      "estimate": 0.005,
@@ -1016,6 +1060,50 @@
      "mean_confidence_change": 1.22
     }
    },
+   "pooled": {
+    "control_flip": {
+     "k": 15,
+     "n": 112,
+     "rate": 0.134,
+     "ci95": [
+      0.083,
+      0.209
+     ]
+    },
+    "objection_flip": {
+     "k": 10,
+     "n": 894,
+     "rate": 0.011,
+     "ci95": [
+      0.006,
+      0.02
+     ]
+    },
+    "follow_correct": {
+     "k": 5,
+     "n": 210,
+     "rate": 0.024,
+     "ci95": [
+      0.01,
+      0.055
+     ]
+    },
+    "follow_misleading": {
+     "k": 1,
+     "n": 684,
+     "rate": 0.001,
+     "ci95": [
+      0.0,
+      0.008
+     ]
+    },
+    "compounds_with_any_follow": 3,
+    "control_flip_directions": {
+     "W->R": 6,
+     "R->W": 7,
+     "W->W": 2
+    }
+   },
    "contrasts": {
     "authority_high_minus_low_follow": {
      "estimate": 0.004,
@@ -1089,6 +1177,48 @@
     }
    },
    "n_compounds": 38
+  }
+ },
+ "channel_effect": {
+  "cells": 70,
+  "compounds": 24,
+  "atlas_as_turn1_data_correct": {
+   "k": 49,
+   "n": 70,
+   "rate": 0.7,
+   "ci95": [
+    0.585,
+    0.795
+   ]
+  },
+  "atlas_from_reviewer_corrected": {
+   "k": 0,
+   "n": 139,
+   "rate": 0.0,
+   "ci95": [
+    0.0,
+    0.027
+   ]
+  },
+  "atlas_from_reviewer_corrected_by_authority": {
+   "high": {
+    "k": 0,
+    "n": 69,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.053
+    ]
+   },
+   "low": {
+    "k": 0,
+    "n": 70,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.052
+    ]
+   }
   }
  }
 }

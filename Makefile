@@ -5,7 +5,7 @@ VARIANT ?= both
 YES ?=
 RUNARGS = --model $(MODEL) --turn1-variant $(VARIANT) $(YES)
 
-.PHONY: setup data test wild estimate probe pilot dryrun full analyze
+.PHONY: setup data test wild estimate probe pilot dryrun full analyze figures
 
 setup:
 	py -3.12 -m venv .venv
@@ -39,3 +39,8 @@ full:
 
 analyze:
 	$(PY) -m sor.analyze
+
+PRIMARY_RUN := runs/full_muse-spark-1.3-contributor_both_20261113T201055-203204Z
+figures:
+	$(PY) -m sor.analyze $(PRIMARY_RUN)
+	$(PY) -m sor.figures $(PRIMARY_RUN) $(SECONDARY_RUN)
