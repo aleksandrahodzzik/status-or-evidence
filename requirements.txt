@@ -6,3 +6,4 @@ requests>=2.31
 tiktoken>=0.7
 matplotlib>=3.8
 pytest>=8
+markdown>=3.5
