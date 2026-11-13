@@ -29,8 +29,9 @@ from sor.client import CallResult, ModelClient, ParamUnsupported, count_tokens
 from sor.config import ROOT, VARIANTS, load_config, model_entry, path
 from sor.load import evidence_text, load_compounds
 from sor.parse import parse_answer
-from sor.prompts import CONDITIONS, parse_condition, reviewer_message, turn1_messages, turn2_messages
-from sor.targets import compute_targets, evidence_snippets
+from sor.prompts import (AUTHORITY, CONDITIONS, EVIDENCE_LEVELS, parse_condition, reviewer_message, turn1_messages,
+                         turn2_messages)
+from sor.targets import atlas_support, compute_targets, evidence_snippets
 
 N_DRYRUN = 3
 
@@ -68,26 +69,29 @@ def turn2_cells(job: dict, t1: CallResult, parsed: dict, cfg: dict) -> tuple[dic
         return targets, [], [{"condition": k, "reason": targets["skip_reason"]} for k in CONDITIONS]
     run, skip = [], []
     k, min_abs = cfg["targets"]["k_features"], cfg["targets"]["min_centroid_abs_z"]
+    answer = targets["turn1_moa"]
     for cond in CONDITIONS:
         p = parse_condition(cond)
-        if cond == "control":
-            target, snippets = None, None
-        else:
+        target, snippets, atlas = None, None, None
+        if cond != "control":
             target = targets["correct_target"] if p["direction"] == "correct" else targets["misleading_target"]
             if target is None:
                 skip.append({"condition": cond, "reason": targets["skip_reason"]})
                 continue
-            snippets = evidence_snippets(c, target, k, min_abs) if p["evidence"] == "evidence" else None
-        msgs = turn2_messages(job["messages"], t1.text, reviewer_message(cond, target, snippets))
-        run.append({"condition": cond, "target": target, "snippets": snippets, "messages": msgs})
+            if p["evidence"] == "evidence":
+                snippets = evidence_snippets(c, target, k, min_abs)
+            elif p["evidence"] == "atlas":
+                atlas = atlas_support(c, target, answer)
+        msgs = turn2_messages(job["messages"], t1.text, reviewer_message(cond, target, snippets, atlas, answer))
+        run.append({"condition": cond, "target": target, "snippets": snippets, "atlas": atlas, "messages": msgs})
     return targets, run, skip
 
 
 def estimate(cfg: dict, client: ModelClient, model_id: str, compounds: list[dict], variants: list[str],
              seeds: list[int], with_turn2: bool) -> dict:
     """Calls needed / cached and expected + worst-case cost. Turn-2 counts are exact where turn 1 is cached;
-    otherwise expected uses the source run's first call as a prior (right -> 5 calls, wrong -> 9) and the worst
-    case assumes every turn 1 wrong (9 calls)."""
+    otherwise expected uses the source run's first call as a prior (right -> control + misleading cells, wrong ->
+    every condition) and the worst case assumes every turn 1 wrong."""
     entry = model_entry(cfg, model_id)
     est = cfg["estimate"]
     margin, exp_out, t1_ans = est["input_token_margin"], est["expected_output_tokens"], est["turn1_answer_tokens"]
@@ -125,11 +129,12 @@ def estimate(cfg: dict, client: ModelClient, model_id: str, compounds: list[dict
                 out["cost_max"] += price_usd(entry, int(n2 * margin), cfg["max_tokens"])
         else:
             n2 = n_in + t1_ans + sample_review
-            n_exp = 5 if job["compound"].get("source_first_correct") else 9
+            n_all = len(CONDITIONS)
+            n_exp = 1 + len(AUTHORITY) * len(EVIDENCE_LEVELS) if job["compound"].get("source_first_correct") else n_all
             out["turn2_calls_expected"] += n_exp
-            out["turn2_calls_max"] += 9
+            out["turn2_calls_max"] += n_all
             out["cost_expected"] += n_exp * price_usd(entry, int(n2 * margin), exp_out)
-            out["cost_max"] += 9 * price_usd(entry, int(n2 * margin), cfg["max_tokens"])
+            out["cost_max"] += n_all * price_usd(entry, int(n2 * margin), cfg["max_tokens"])
     out["input_tokens_turn1_mean"] = round(tok_sum / max(1, out["turn1_calls"]))
     out["uncached_calls_expected"] = (out["turn1_calls"] - out["turn1_cached"]
                                       + out["turn2_calls_expected"] - out["turn2_cached"])
@@ -240,7 +245,8 @@ class Run:
         parsed = parse_answer(res.text) if res.status == "ok" else parse_answer(None)
         moa = parsed["moa"]
         self._emit({**self._base(job), "turn": 2, "condition": cell["condition"], "target_moa": cell["target"],
-                    "evidence_snippets": cell["snippets"], "messages": cell["messages"],
+                    "evidence_snippets": cell["snippets"], "atlas_evidence": cell.get("atlas"),
+                    "messages": cell["messages"],
                     **self._result_fields(res, parsed),
                     "flipped": (moa != turn1_moa) if moa else None,
                     "correct": (moa == c["true_moa"]) if moa else None,
@@ -359,11 +365,17 @@ def main(argv: list[str] | None = None, transport=None) -> int:
     ap.add_argument("command", choices=["estimate", "probe", "pilot", "dryrun", "full"])
     ap.add_argument("--model", default="primary", help="primary | secondary (config.yaml)")
     ap.add_argument("--turn1-variant", default="both", choices=[*VARIANTS, "both"])
+    ap.add_argument("--seeds", default=None, help="comma-separated seeds for full (default: config.yaml)")
+    ap.add_argument("--max-spend", type=float, default=None,
+                    help="stop this run once it has spent this many USD (kill switch = ledger + this, never above cap)")
     ap.add_argument("--yes", action="store_true", help="allow real (paid) API calls")
     ap.add_argument("--config", default=None)
     a = ap.parse_args(argv)
     cfg = load_config(a.config)
     client = make_client(cfg, transport)
+    if a.max_spend is not None:
+        client.budget.cap_usd = min(client.budget.cap_usd, client.budget.total() + a.max_spend)
+        print(f"   run spend limit ${a.max_spend:.2f}: kill switch lowered to ${client.budget.cap_usd:.4f}")
     compounds = load_compounds()
     model_id = model_entry(cfg, a.model)["id"]
     variants = list(VARIANTS) if a.turn1_variant == "both" else [a.turn1_variant]
@@ -380,7 +392,8 @@ def main(argv: list[str] | None = None, transport=None) -> int:
         print(f"dryrun compounds ({rule}): {[c['compound_id'] for c in cs]}")
         seeds, t2 = [0], True
     else:
-        cs, seeds, t2 = compounds, list(cfg["seeds"]), True
+        seeds = [int(s) for s in a.seeds.split(",")] if a.seeds else list(cfg["seeds"])
+        cs, t2 = compounds, True
 
     plan = estimate(cfg, client, model_id, cs, variants, seeds, t2)
     print_plan(a.command, model_id, plan, client, cfg)
@@ -392,7 +405,7 @@ def main(argv: list[str] | None = None, transport=None) -> int:
             print(f"   {cfg['api_key_env']} is not set; nothing sent")
             return 1
     run = Run(cfg, client, a.command, model_id, variants, seeds, cs, t2,
-              {"turn1_variant": a.turn1_variant, "yes": a.yes})
+              {"turn1_variant": a.turn1_variant, "seeds": a.seeds, "max_spend": a.max_spend, "yes": a.yes})
     try:
         return run.execute()
     except (BudgetExceeded, ParamUnsupported) as exc:

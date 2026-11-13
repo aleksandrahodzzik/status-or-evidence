@@ -229,17 +229,23 @@ def match_well_keys(wells: list[dict], compound: str, table: pd.DataFrame, tol: 
     return keys
 
 
-def nsc_neighbours(well_keys: list[str], compound: str) -> tuple[list[dict], list[str]]:
-    """MuseCell's atlas query in its own space: median ResNet50+TVN vector of the acquired wells, cosine to every
-    annotated reference treatment of the other compounds (LOCO). Returns (top-20 neighbours, no names;
-    MoA order by first appearance over the full ranking)."""
+def atlas_similarity(well_keys: list[str], compound: str) -> tuple[pd.DataFrame, np.ndarray]:
+    """Annotated reference treatments of the other compounds (LOCO) and their cosine similarity to the median
+    ResNet50+TVN vector of the acquired wells."""
     dims = [f"d{i:03d}" for i in range(212)]
     wv = pd.read_parquet(RAW / "atlas_resnet50_tvn" / "wells.parquet").set_index("well_key")
     tr = pd.read_parquet(RAW / "atlas_resnet50_tvn" / "treatments.parquet")
     tr = tr[tr.moa_annotated_conc.astype(bool) & (tr.compound != compound)].reset_index(drop=True)
     q = np.median(wv.loc[well_keys, dims].to_numpy(), axis=0)
     m = tr[dims].to_numpy()
-    sim = m @ q / (np.linalg.norm(m, axis=1) * np.linalg.norm(q) + 1e-12)
+    return tr, m @ q / (np.linalg.norm(m, axis=1) * np.linalg.norm(q) + 1e-12)
+
+
+def nsc_neighbours(well_keys: list[str], compound: str) -> tuple[list[dict], list[str]]:
+    """MuseCell's atlas query in its own space: median ResNet50+TVN vector of the acquired wells, cosine to every
+    annotated reference treatment of the other compounds (LOCO). Returns (top-20 neighbours, no names;
+    MoA order by first appearance over the full ranking)."""
+    tr, sim = atlas_similarity(well_keys, compound)
     order = np.argsort(-sim)
     neighbours = [{"moa": tr.moa.iloc[i], "concentration_uM": float(tr.concentration_uM.iloc[i]),
                    "similarity": round(float(sim[i]), 4)} for i in order]

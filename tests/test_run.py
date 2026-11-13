@@ -44,11 +44,11 @@ def test_dryrun_end_to_end_and_rerun_free(cfg, cfg_file, compounds):
         ran = [x for x in t2 if x["status"] != "skipped"]
         skipped = [x for x in t2 if x["status"] == "skipped"]
         if r["turn1_moa"] == truth[r["compound_id"]]:
-            assert len(ran) == 5 and len(skipped) == 4
+            assert len(ran) == 7 and len(skipped) == 6
             assert all(x["skip_reason"] == "N/A: turn-1 already correct" for x in skipped)
             assert all("dir-correct" in x["condition"] for x in skipped)
         else:
-            assert len(ran) == 9 and not skipped
+            assert len(ran) == 13 and not skipped
         for x in ran:
             assert x["messages"][2]["content"] == r["raw_text"]  # the model's actual turn-1 answer
             if x["condition"] != "control":
@@ -82,3 +82,15 @@ def test_kill_switch_stops_run_cleanly(cfg, tmp_path):
     ledger = [json.loads(x) for x in Path(cfg["paths"]["ledger"]).read_text(encoding="utf-8").splitlines()]
     assert sum(x["cost_usd"] for x in ledger) <= cfg["budget_cap_usd"]
     assert len(recs) == len(fake.calls) == len(ledger) < 38
+
+
+def test_max_spend_stops_run_below_cap(cfg, tmp_path):
+    cfg["models"]["primary"]["price_in_per_m"] = 1000.0  # $1/call
+    cfg_file = tmp_path / "cfg_expensive.yaml"
+    cfg_file.write_text(yaml.safe_dump(cfg), encoding="utf-8")
+    fake = FakeTransport()
+    code = runmod.main(["pilot", "--turn1-variant", "with_nsc", "--max-spend", "10", "--yes", "--config",
+                        str(cfg_file)], transport=fake)
+    assert code == 2
+    ledger = [json.loads(x) for x in Path(cfg["paths"]["ledger"]).read_text(encoding="utf-8").splitlines()]
+    assert 0 < len(ledger) < 38 and sum(x["cost_usd"] for x in ledger) <= 10

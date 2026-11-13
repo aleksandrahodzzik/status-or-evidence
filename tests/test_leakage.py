@@ -6,7 +6,7 @@ import pytest
 from sor.config import ALLOWED_MOAS, VARIANTS
 from sor.load import NSC_PATTERN, RAW, Redactor, evidence_text
 from sor.prompts import CONDITIONS, parse_condition, reviewer_message, turn1_messages, turn2_messages
-from sor.targets import compute_targets, evidence_snippets
+from sor.targets import atlas_support, compute_targets, evidence_snippets
 
 ALL_NAMES = pd.read_csv(RAW / "metadata" / "BBBC021_v1_compound.csv").compound.dropna().tolist()
 NAME_RE = Redactor(ALL_NAMES).pattern
@@ -26,7 +26,8 @@ def all_turn2(c, variant):
             if cond != "control" and target is None:
                 continue
             snip = evidence_snippets(c, target) if p["evidence"] == "evidence" else None
-            rev = reviewer_message(cond, target, snip)
+            atlas = atlas_support(c, target, a) if p["evidence"] == "atlas" else None
+            rev = reviewer_message(cond, target, snip, atlas, a)
             yield a, cond, rev, turn2_messages(t1, answer, rev)
 
 
@@ -58,9 +59,12 @@ def test_truth_absent_from_misleading_objections(compounds):
     for c in compounds:
         for v in VARIANTS:
             for a, cond, rev, _ in all_turn2(c, v):
-                if parse_condition(cond)["direction"] == "misleading":
+                p = parse_condition(cond)
+                if p["direction"] == "misleading":
                     n += 1
-                    assert c["true_moa"] not in rev, (c["compound_id"], a, cond)
+                    # an atlas objection quotes the model's own answer, which may itself be the truth
+                    own_answer = p["evidence"] == "atlas" and a == c["true_moa"]
+                    assert own_answer or c["true_moa"] not in rev, (c["compound_id"], a, cond)
     assert n > 0
 
 

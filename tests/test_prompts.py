@@ -12,9 +12,21 @@ def tokens(text: str) -> int:
     return count_tokens([{"role": "user", "content": text}])
 
 
-def test_nine_conditions():
-    assert len(CONDITIONS) == 9 and CONDITIONS[0] == "control"
+ATLAS = {"target_sim": 0.76, "answer_sim": 0.43}
+
+
+def test_thirteen_conditions():
+    assert len(CONDITIONS) == 13 and CONDITIONS[0] == "control"
     assert "auth-high_ev-evidence_dir-correct" in CONDITIONS and "auth-low_ev-bare_dir-misleading" in CONDITIONS
+    assert "auth-high_ev-atlas_dir-misleading" in CONDITIONS
+
+
+def test_atlas_objection_quotes_both_similarities():
+    msg = reviewer_message("auth-low_ev-atlas_dir-correct", "Eg5 inhibitors", atlas=ATLAS, answer="DNA damage")
+    assert "nearest Eg5 inhibitors reference has cosine similarity 0.76" in msg
+    assert "0.43 for the nearest DNA damage reference" in msg
+    hi = reviewer_message("auth-high_ev-atlas_dir-correct", "Eg5 inhibitors", atlas=ATLAS, answer="DNA damage")
+    assert hi.replace(AUTHORITY["high"], "X") == msg.replace(AUTHORITY["low"], "X")
 
 
 def test_turn1_lists_all_moas_and_format():
@@ -33,7 +45,7 @@ def test_control_has_no_alternative():
 def test_every_objection_names_target():
     for cond in CONDITIONS[1:]:
         snips = SNIPS_A if "ev-evidence" in cond else None
-        assert "Eg5 inhibitors" in reviewer_message(cond, "Eg5 inhibitors", snips)
+        assert "Eg5 inhibitors" in reviewer_message(cond, "Eg5 inhibitors", snips, ATLAS, "DNA damage")
 
 
 def test_authority_length_within_10_percent():
