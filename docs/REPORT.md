@@ -1,6 +1,6 @@
 # Status or Evidence? An AI scientist that cannot be argued with
 
-*Apart Research "AI x Epistemics" sprint, November 2026. DRAFT: secondary-model results pending.*
+*Apart Research "AI x Epistemics" sprint, November 2026.*
 
 ## Abstract
 
@@ -15,8 +15,10 @@ almost never changes its answer under objection: it followed 5 of 701 correct ob
 ones. Status had no measurable effect, and neither did evidence. Most strikingly, the reference atlas, which raises
 turn-1 accuracy from 27% to 69% when its results are part of the evidence, corrected **0 of 139** wrong answers
 when a reviewer quoted it, even though in those cells the quoted numbers favoured the reviewer (e.g. 0.74 vs 0.10). Objections did not make the model more accurate; they froze it: answers changed in 13% of
-"double-check" cells but in 1% of objection cells. The failure mode is the opposite of sycophancy: source-dependent
-discounting of evidence, which makes the model's correctness independent of the quality of criticism.
+"double-check" cells but in 1% of objection cells. The larger `muse-spark-1.3` replicates the pattern (394 calls:
+1 of 318 objections changed its answer, versus 6 of 38 "double-check" prompts). The failure mode is the opposite of
+sycophancy: source-dependent discounting of evidence, which makes the model's correctness independent of the
+quality of criticism.
 
 ## 1. Introduction
 
@@ -60,7 +62,9 @@ phrase.
 
 **Model and sampling.** `muse-spark-1.3-contributor` via Meta's OpenAI-compatible API, temperature 0.7, seeds
 0/1/2, `max_tokens` 8000 (reasoning shares this budget). JSON answer `{moa, confidence, rationale}`. 228 turn-1
-calls, 2,284 turn-2 calls, 0 API errors, 6 unparsed answers; total cost $1.92 including pilots.
+calls, 2,284 turn-2 calls, 0 API errors, 6 unparsed answers. Replication with the larger `muse-spark-1.3`
+(`with_nsc` only, seed 0, all 13 conditions): 38 turn-1 and 356 turn-2 calls, 0 errors, 0 unparsed. Total API
+spend for the project, including probe, pilot and dry run: $7.73.
 
 **Statistics.** Rates with Wilson 95% intervals. Contrasts with 95% percentile intervals from a cluster bootstrap
 over compounds (2,000 resamples; compounds are the unit, seeds and conditions are nested within them).
@@ -131,9 +135,22 @@ re-sampling, not improvement. Any objection reduced changes to about 1% (control
 [5.5, 19.8] with atlas, +4.9 [1.3, 9.3] without). Among wrong turn-1 answers, a correct objection with atlas
 evidence corrected 13.4 points [2.9, 27.5] fewer than "double-check".
 
-### 3.6 Second model (muse-spark-1.3)
+### 3.6 Replication: muse-spark-1.3
 
-*Pending: `with_nsc`, seed 0, all 13 conditions.*
+The larger model is about as accurate at turn 1 (23/38 = 60%, 45-74%) and just as immovable:
+
+| | control: answer changed | objection: answer changed | correct objection followed | misleading objection followed |
+|---|---|---|---|---|
+| muse-spark-1.3, with atlas | 6/38 = 16% [7, 30] (3 W→R, 2 R→W, 1 W→W) | 1/318 = 0.3% [0.1, 1.8] | 1/90 = 1.1% [0.2, 6.0] | 0/228 = 0% [0, 1.7] |
+
+Control minus objection change rate: +15.5 points [5.3, 28.3]. The single follow was a senior-PI atlas objection.
+Its rebuttals have the same shape; with atlas similarities 0.75 (target) vs 0.13 (its answer):
+
+> "Cholesterol embedding reflects morphology confound, not mechanism."
+
+![Replication](figures/secondary_follow.png)
+
+*Figure 3. As Figure 1, for `muse-spark-1.3` (one seed, so intervals are wider).*
 
 ## 4. Discussion
 
@@ -150,7 +167,8 @@ its own data, i.e. when the evidence came through its own tools.
 
 ## 5. Limitations
 
-- One primary model, the contributor tier; the second model is run on one variant and one seed only.
+- One model family. The primary model is the contributor tier; the larger model is run on one variant and one seed
+  only (90 correct-objection cells).
 - A single domain and a single objection template; the reviewer message is short and arrives after the model has
   committed in writing (commitment effects are part of what we measure).
 - Quoted feature evidence is weak by construction (closest features, not diagnostic ones); atlas evidence is
@@ -164,6 +182,15 @@ its own data, i.e. when the evidence came through its own tools.
 
 ## 6. Reproducibility
 
-Everything runs from this repository: `python -m sor.run full --yes` (cache makes reruns free),
-`python -m sor.analyze`. Raw calls (`runs/*/raw.jsonl`), the budget ledger and the exact prompts are committed.
-76 offline tests cover leakage, targets, prompts, parsing, caching and the budget kill switch.
+Everything runs from this repository:
+
+```
+python -m sor.run full --yes                                                        # primary, both variants, 3 seeds
+python -m sor.run full --model secondary --turn1-variant with_nsc --seeds 0 --yes  # replication
+python -m sor.analyze runs/<run>      # rates, bootstrap contrasts -> analysis.json
+python -m sor.figures runs/<primary> runs/<secondary>
+```
+
+All API responses are cached, so reruns cost $0 and reproduce the same records. Raw calls (`runs/*/raw.jsonl`,
+including every exact prompt), `analysis.json` per run and the budget ledger are committed. 80 offline tests
+cover leakage of compound identity, targets, prompts, parsing, caching, the budget kill switch and the analysis.

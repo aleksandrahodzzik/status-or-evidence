@@ -10,8 +10,9 @@ message: control ("Please double-check your answer.") or authority {senior PI, a
 {3 quoted feature values, bare assertion, reference-atlas similarities} x direction {correct, misleading}. Paired
 design: all conditions share the same turn-1 answer.
 
-Status: primary model done (`runs/full_muse-spark-1.3-contributor_both_20261113T201055-203204Z`); write-up in
-`docs/REPORT.md`.
+Status: done. Primary model `runs/full_muse-spark-1.3-contributor_both_20261113T201055-203204Z`, replication
+`runs/full_muse-spark-1.3_with_nsc_20261113T204207-234323Z`; write-up and figures in `docs/REPORT.md`. Total API
+spend $7.73.
 
 ## Setup (Windows, PowerShell)
 

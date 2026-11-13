@@ -41,6 +41,8 @@ analyze:
 	$(PY) -m sor.analyze
 
 PRIMARY_RUN := runs/full_muse-spark-1.3-contributor_both_20261113T201055-203204Z
+SECONDARY_RUN := runs/full_muse-spark-1.3_with_nsc_20261113T204207-234323Z
 figures:
 	$(PY) -m sor.analyze $(PRIMARY_RUN)
+	$(PY) -m sor.analyze $(SECONDARY_RUN)
 	$(PY) -m sor.figures $(PRIMARY_RUN) $(SECONDARY_RUN)

@@ -8,6 +8,7 @@ Writes docs/figures/*.png.
 from __future__ import annotations
 
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -52,14 +53,15 @@ def fig_follow(an: dict, name: str) -> Path:
         labels.append((x + 0.2, "control"))
         ax.set_xticks([p for p, _ in labels], [t for _, t in labels], fontsize=8)
         ax.set_title(VAR_LABEL[v], fontsize=10)
-        ax.set_ylim(0, 25)
+        top = max([c[k]["ci95"][1] for c in conds.values() for k in ("flip", "follow") if c.get(k) and c[k]["n"]])
+        ax.set_ylim(0, max(25, 5 * math.ceil(top * 100 / 5)))
         ax.grid(axis="y", alpha=0.3)
     axes[0][0].set_ylabel("% of turn-2 answers (95% CI)")
     axes[0][0].legend(fontsize=7, loc="upper left")
     fig.text(0.5, 0.005, "objection support: bare claim | 3 quoted feature z-scores | atlas similarities;  "
-             "speaker: senior PI (solid) | junior (hatched);  control: \"Please double-check your answer.\"",
+             "speaker: senior PI (solid) | junior (hatched)\ncontrol: \"Please double-check your answer.\"",
              ha="center", fontsize=7)
-    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.tight_layout(rect=(0, 0.07, 1, 1))
     path = OUT / f"{name}_follow.png"
     fig.savefig(path, dpi=200)
     plt.close(fig)
