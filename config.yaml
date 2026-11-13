@@ -1,0 +1,44 @@
+# status-or-evidence experiment config. Prices in USD per 1M tokens; reasoning tokens bill as output
+# (the API reports them inside usage.completion_tokens).
+base_url: https://api.meta.ai/v1
+api_key_env: MODEL_API_KEY          # read at call time only; never logged
+
+models:
+  primary:
+    id: muse-spark-1.3-contributor
+    price_in_per_m: 0.10
+    price_out_per_m: 0.20
+  secondary:                        # only later, same harness
+    id: muse-spark-1.3
+    price_in_per_m: 1.25
+    price_out_per_m: 4.25
+
+temperature: 0.7
+seeds: [0, 1, 2]
+max_tokens: 8000                    # reasoning shares this budget (MuseCell DECISIONS, Phase 0)
+reasoning_effort: null              # null = API default (not sent)
+send_seed: true                     # if the API rejects `seed`, set false; seed stays in the cache key
+send_temperature: true
+
+budget_cap_usd: 18.0                # kill switch: no new call if ledger + reserved + estimate > cap
+hard_limit_usd: 20.0                # cap may never exceed this
+
+concurrency: 6
+request_timeout_s: 180
+max_retries: 4
+
+estimate:
+  expected_output_tokens: 1500      # MuseCell ledger: Spark decision turns, mean ~1.0-1.5k incl. reasoning
+  input_token_margin: 1.15          # local tokenizer is a proxy for the Meta tokenizer
+  turn1_answer_tokens: 120          # visible JSON answer carried into turn 2
+
+targets:
+  k_features: 3
+  min_centroid_abs_z: 1.0           # only features where the target class deviates from DMSO; 0 = literal rule
+
+paths:
+  compounds: data/compounds.jsonl
+  raw: data/raw
+  cache: cache
+  ledger: budget/ledger.jsonl
+  runs: runs

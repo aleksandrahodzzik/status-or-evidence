@@ -1,0 +1,4 @@
+# keep copied inputs and run logs byte-identical (sha256 in data/PROVENANCE.md)
+data/** -text
+runs/** -text
+budget/** -text
