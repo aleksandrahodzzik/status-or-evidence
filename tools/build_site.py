@@ -2,7 +2,7 @@
 
     .venv\\Scripts\\python.exe tools/build_site.py
 
-site/index.html is hand-written and reads window.SOR_DATA from site/data.js, so it opens from disk (file://).
+site/explorer.html is hand-written and reads window.SOR_DATA from site/data.js, so it opens from disk (file://).
 """
 
 from __future__ import annotations
