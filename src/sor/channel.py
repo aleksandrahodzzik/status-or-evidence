@@ -231,7 +231,7 @@ def figure(res: dict, out: Path) -> Path:
     ax.set_xticks(range(len(rows)), [r[0] for r in rows], fontsize=7.5)
     ax.set_ylabel("% correct (95% CI)")
     ax.set_ylim(0, 100)
-    ax.set_title(f"The same atlas text, before and after commitment ({res['primary_cells']} cells, "
+    ax.set_title(f"The same atlas evidence as data or as disagreement ({res['primary_cells']} cells, "
                  f"{res['primary_compounds']} compounds: wrong without atlas, atlas favours truth)", fontsize=8)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
