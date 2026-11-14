@@ -46,8 +46,9 @@ MuseCell's recorded votes.
 
 ## 2. Related Work
 
-**Sycophancy and answer flipping.** SycEval (Fanous et al., 2025) measures answer flipping under rebuttal pressure,
-and ELEPHANT (Cheng et al., 2025) social sycophancy; OpenAI's GPT-4o postmortem (2025) shows how preference signals
+**Sycophancy and answer flipping.** SycEval (Fanous et al., 2025) measures answer flipping under rebuttal pressure
+and finds citation-based rebuttals the most likely to flip correct answers to wrong ones; ELEPHANT (Cheng et al.,
+2026) measures social sycophancy; OpenAI's GPT-4o postmortem (2025) shows how preference signals
 can produce a model that agrees too readily. These works mostly ask whether models cave. We ask the paired question,
 whether they cave *and* whether they update when the objection is right, and find the opposite failure.
 
@@ -59,9 +60,10 @@ reviewer's evidence at all.
 Sourbut, 2025) propose evals of calibration and manipulation resistance. Our design is a concrete instance of one
 such eval: a 2x3x2 paired factorial that separates status from evidence and correct from misleading pushback.
 
-**Cell-painting MoA prediction.** BBBC021 (Ljosa et al., 2012) with MoA annotations for MCF-7 compounds (Caie et
-al., 2010) is a standard benchmark; nearest-neighbour matching against annotated references in a deep embedding is
-the usual baseline. We use it because ground truth is known and the atlas gives a verifiable form of evidence.
+**Cell-painting MoA prediction.** BBBC021 (Caie et al., 2010; Ljosa et al., 2012), with the 38-compound, 12-class
+MoA subset of Ljosa et al. (2013), is a standard benchmark; nearest-neighbour matching against annotated references
+in a deep embedding (Ando et al., 2017) is the usual baseline. We use it because ground truth is known and the atlas
+gives a verifiable form of evidence.
 
 ## 3. Methods
 
@@ -71,8 +73,8 @@ feature z-scores, a Microscopist report and a dose-response summary. Compound na
 removed (leakage tests in `tests/test_leakage.py`). Data provenance with sha256 hashes: `data/PROVENANCE.md`.
 
 **Turn-1 variants.** `with_nsc` additionally includes MuseCell's reference-atlas results (nearest annotated
-reference treatments in a ResNet50+TVN embedding, reference compound names stripped); `no_nsc` contains no atlas
-text at all. Our code reproduces 152/152 of MuseCell's recorded per-well atlas votes.
+reference treatments in a ResNet50 embedding (He et al., 2016) with typical variation normalization (TVN; Ando et
+al., 2017), reference compound names stripped); `no_nsc` contains no atlas text at all. Our code reproduces 152/152 of MuseCell's recorded per-well atlas votes.
 
 **Turn 2.** The same conversation, the model's actual turn-1 answer, then one reviewer message: either the control
 "Please double-check your answer." or an objection
@@ -97,7 +99,7 @@ calls, 2,284 turn-2 calls, 0 API errors, 6 unparsed answers. Replication with th
 (`with_nsc` only, seed 0, all 13 conditions): 38 turn-1 and 356 turn-2 calls, 0 errors, 0 unparsed. Total API
 spend for the project, including probe, pilot and dry run: $7.73.
 
-**Statistics.** Rates with Wilson 95% intervals. Contrasts with 95% percentile intervals from a cluster bootstrap
+**Statistics.** Rates with Wilson (1927) 95% intervals. Contrasts with 95% percentile intervals from a cluster bootstrap
 over compounds (2,000 resamples; compounds are the unit, seeds and conditions are nested within them).
 
 **Deviation from plan.** The atlas evidence level was added after the first full run showed almost no updating, to
@@ -224,16 +226,22 @@ compound identity, targets, prompts, parsing, caching, the budget kill switch an
   screens. bioRxiv 161422.
 - Caie, P. D., Walls, R. E., Ingleston-Orme, A., et al. (2010). High-content phenotypic profiling of drug response
   signatures across distinct cancer cells. *Molecular Cancer Therapeutics*, 9(6), 1913-1926.
-- Cheng, M., et al. (2025). ELEPHANT, a benchmark of social sycophancy in LLMs (as listed in the sprint's Track 1
-  reading list).
-- Cotton-Barratt, O., Vaintrob, L., & Sourbut, O. (2025). Design Sketches: Collective Epistemics. Forethought.
-- Fanous, A., et al. (2025). SycEval: Evaluating LLM Sycophancy. *AIES 2025*.
+- Cheng, M., Yu, S., Lee, C., Khadpe, P., Ibrahim, L., & Jurafsky, D. (2026). ELEPHANT: Measuring and
+  understanding social sycophancy in LLMs. *ICLR 2026*. arXiv:2505.13995.
+- Cotton-Barratt, O., Vaintrob, L., & Sourbut, O. (2025, December 25). Design sketches: Collective epistemics.
+  Forethought. https://www.forethought.org/research/design-sketches-collective-epistemics
+- Fanous, A., Goldberg, J., Agarwal, A., Lin, J., Zhou, A., Xu, S., Bikia, V., Daneshjou, R., & Koyejo, S. (2025).
+  SycEval: Evaluating LLM sycophancy. *Proceedings of the AAAI/ACM Conference on AI, Ethics, and Society*, 8(1),
+  893-900. https://doi.org/10.1609/aies.v8i1.36598
 - He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. *CVPR 2016*.
 - Ljosa, V., Sokolnicki, K. L., & Carpenter, A. E. (2012). Annotated high-throughput microscopy image sets for
   validation. *Nature Methods*, 9(7), 637.
-- OpenAI (2025). Sycophancy in GPT-4o: what happened and what we're doing about it.
-- Ren, R., et al. (2025). The MASK Benchmark: Disentangling honesty from accuracy in AI systems. Center for AI
-  Safety.
+- Ljosa, V., Caie, P. D., ter Horst, R., et al. (2013). Comparison of methods for image-based profiling of cellular
+  morphological responses to small-molecule treatment. *Journal of Biomolecular Screening*, 18(10), 1321-1329.
+- OpenAI (2025, April 29). Sycophancy in GPT-4o: What happened and what we're doing about it.
+  https://openai.com/index/sycophancy-in-gpt-4o/
+- Ren, R., Agarwal, A., Mazeika, M., et al. (2025). The MASK Benchmark: Disentangling honesty from accuracy in AI
+  systems. arXiv:2503.03750.
 - Wilson, E. B. (1927). Probable inference, the law of succession, and statistical inference. *Journal of the
   American Statistical Association*, 22(158), 209-212.
 
