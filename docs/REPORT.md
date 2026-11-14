@@ -1,6 +1,6 @@
 # Status or Evidence? An AI scientist that takes data, not arguments
 
-**Oleksandra**, Independent researcher
+**Oleksandra Khodzinska**, Independent researcher
 
 *Apart Research "AI x Epistemics" Research Sprint, November 13-15, 2026. Track 1: Model Epistemics &
 Decision-Making Evals. One-page brief: [JUDGE.pdf](JUDGE.pdf).*

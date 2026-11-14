@@ -1,6 +1,6 @@
 # Status or Evidence? One page for the judge
 
-**Oleksandra**, Independent researcher. Apart Research "AI x Epistemics", Track 1, November 2026.
+**Oleksandra Khodzinska**, Independent researcher. Apart Research "AI x Epistemics", Track 1, November 2026.
 Full report: [REPORT.pdf](REPORT.pdf). Every answer: [the explorer](https://aleksandrahodzzik.github.io/status-or-evidence/site/explorer.html).
 
 **Claim.** The model updates on evidence shown as data, and discounts the same evidence framed as disagreement. Reviewer status does nothing. A correct reviewer who argues is less effective than one who shows the data.
