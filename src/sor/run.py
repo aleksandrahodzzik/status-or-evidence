@@ -160,8 +160,9 @@ def print_plan(name: str, model_id: str, plan: dict, client: ModelClient, cfg: d
 
 class Run:
     def __init__(self, cfg: dict, client: ModelClient, command: str, model_id: str, variants: list[str],
-                 seeds: list[int], compounds: list[dict], with_turn2: bool, args: dict):
+                 seeds: list[int], compounds: list[dict], with_turn2: bool, args: dict, cells_fn=None):
         self.cfg, self.client, self.command, self.model = cfg, client, command, model_id
+        self.cells_fn = cells_fn or turn2_cells
         self.variants, self.seeds, self.compounds, self.with_turn2 = variants, seeds, compounds, with_turn2
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S-%fZ")
         vtag = variants[0] if len(variants) == 1 else "both"
@@ -220,7 +221,7 @@ class Run:
         tag = f"{self.command}:{c['compound_id']}:{job['variant']}:s{job['seed']}:turn1"
         res = self._call(job, job["messages"], tag)
         parsed = parse_answer(res.text) if res.status == "ok" else parse_answer(None)
-        targets, cells, skipped = turn2_cells(job, res, parsed, self.cfg) if self.with_turn2 else (
+        targets, cells, skipped = self.cells_fn(job, res, parsed, self.cfg) if self.with_turn2 else (
             compute_targets(c, parsed["moa"]) if res.status == "ok" else None, [], [])
         rec = {**self._base(job), "turn": 1, "condition": "turn1", "target_moa": None, "evidence_snippets": None,
                "messages": job["messages"], **self._result_fields(res, parsed), "flipped": None,
