@@ -24,6 +24,11 @@ Analysis, fixed before any call:
 Reading: tool near the turn-1-data rate means commitment is not what blocks the atlas; tool well above dispute
 means the messenger matters with identical text; tool and dispute both near 0 means commitment, not the messenger.
 
+Replication, fixed before any muse-ember-1.0 call: that model, `no_nsc`, seed 0 only. First the original
+13-condition grid (`python -m sor.run full --model ember --turn1-variant no_nsc --seeds 0`), then this follow-up
+on the same seed. Same cells, conditions and contrasts as above, computed on that model's own turn-1 answers.
+Reading: objections near 0 and tool/share well above dispute means the discounting is not specific to muse-spark.
+
     python -m sor.channel                                   # plan and cost, $0
     python -m sor.channel --yes --max-spend 1               # paid run (primary model)
     python -m sor.channel analyze runs/<channel run> runs/<primary full run>
@@ -246,7 +251,8 @@ def cmd_analyze(run: Path, full: Path | None) -> int:
     res["run"], res["full_run"] = run.name, full.name if full else None
     (run / "analysis.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
     print_analysis(res)
-    p = figure(res, ROOT / "docs" / "figures" / "primary_commitment.png")
+    fig_name = "primary_commitment.png" if "muse-spark-1.3-contributor" in run.name else f"{run.name}_commitment.png"
+    p = figure(res, ROOT / "docs" / "figures" / fig_name)
     print(f"-> {(run / 'analysis.json').relative_to(ROOT) if run.is_relative_to(ROOT) else run}; "
           f"{p.relative_to(ROOT) if p.is_relative_to(ROOT) else p}")
     return 0
@@ -258,6 +264,7 @@ def main(argv: list[str] | None = None, transport=None) -> int:
         return cmd_analyze(Path(argv[1]), Path(argv[2]) if len(argv) > 2 else None)
     ap = argparse.ArgumentParser(prog="python -m sor.channel")
     ap.add_argument("--model", default="primary")
+    ap.add_argument("--seeds", default=None, help="comma-separated; default config.yaml")
     ap.add_argument("--max-spend", type=float, default=None)
     ap.add_argument("--yes", action="store_true", help="allow real (paid) API calls")
     ap.add_argument("--config", default=None)
@@ -267,7 +274,8 @@ def main(argv: list[str] | None = None, transport=None) -> int:
     if a.max_spend is not None:
         client.budget.cap_usd = min(client.budget.cap_usd, client.budget.total() + a.max_spend)
     model_id = model_entry(cfg, a.model)["id"]
-    compounds, seeds = load_compounds(), list(cfg["seeds"])
+    compounds = load_compounds()
+    seeds = [int(s) for s in a.seeds.split(",")] if a.seeds else list(cfg["seeds"])
     p = plan(cfg, client, model_id, compounds, seeds)
     print(f"== channel | model {model_id} | turn 1: cached {VARIANT} answers ({p['turn1'] - len(p['turn1_missing'])}"
           f"/{p['turn1']} cached)")
