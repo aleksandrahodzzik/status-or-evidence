@@ -349,7 +349,7 @@
         <div class="who">Model · second answer</div>
         <div class="answer-head">${moaChip(t2.moa, truth)}
           ${t2.flip === null ? "" : t2.flip ? `<span class="badge changed">changed answer</span>` : `<span class="badge kept">kept its answer</span>`}
-          ${t2.fol ? `<span class="badge followed">followed the reviewer</span>` : ""}${confBar(t2.conf)}</div>
+          ${t2.fol ? `<span class="badge followed">${p && p.mirror ? "took the false class" : "followed the reviewer"}</span>` : ""}${confBar(t2.conf)}</div>
         <p>${esc(t2.why)}</p>
       </div></div>`;
     html += verdict(p, t1, t2, truth);
@@ -420,6 +420,24 @@
     f("chat").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
   });
   if (!framing.length) f("btn-framing").hidden = true;
+  const fakes = [];
+  if (D.contributor && D.contributor.mirror) {
+    for (const r of D.contributor.turn2) {
+      if (r.k !== "mirror-tool" || !r.fol || r.t1 !== D.contributor.truth[r.c]) continue;
+      const dis = fuIdx.get(`${r.v}|${r.c}|${r.s}|mirror-dispute-senior`);
+      if (dis && dis.moa && dis.ok) fakes.push(r);
+    }
+  }
+  let mi = 0;
+  f("btn-mirror").addEventListener("click", () => {
+    const r = fakes[Math.floor(mi / 2) % fakes.length];
+    const k = mi % 2 === 0 ? "mirror-tool" : "mirror-dispute-senior";
+    mi++;
+    f("btn-mirror").textContent = mi % 2 === 1 ? "Now the same false data, argued" : "False data: shown, then argued";
+    refreshFilters({ model: "contributor", variant: r.v, compound: r.c, seed: r.s, cond: k });
+    f("chat").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+  });
+  if (!fakes.length) f("btn-mirror").hidden = true;
   refreshFilters({});
   showStriking();
 })();

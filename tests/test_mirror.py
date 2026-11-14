@@ -210,3 +210,22 @@ def test_mirror_every_changed_answer_names_the_false_class():
     assert len(unparsed) == 6 and {(r["condition"], r["finish_reason"]) for r in unparsed} == \
         {("fake-dispute-senior", "length")}
     assert sum(r["status"] == "skipped" for r in recs) == 4 * 23
+
+
+def test_mirror_post_hoc_spread_and_confidence():
+    """Section 4.9 post-hoc counts: compounds moved per channel and mean confidence (locked to committed runs)."""
+    t2 = [r for r in _load(MIRROR) if r["turn"] == 2 and r["status"] == "ok" and r.get("moa")]
+    by = {}
+    for r in t2:
+        by.setdefault(r["condition"], {}).setdefault(r["compound_id"], []).append(r["followed_target"])
+    moved = {k: sum(any(v) for v in d.values()) for k, d in by.items()}
+    assert (moved["fake-tool"], moved["fake-share"], len(by["fake-tool"])) == (30, 31, 31)
+    keys = {(r["compound_id"], r["seed"]) for r in t2}
+    obj = [r for r in _load(FULL) if r["turn"] == 2 and r["turn1_variant"] == "no_nsc" and r["status"] == "ok"
+           and r.get("moa") and r["condition"].endswith("_dir-misleading") and (r["compound_id"], r["seed"]) in keys]
+    assert {r["compound_id"] for r in obj if r["followed_target"]} == {"s_bb3b52891e"}
+    fol = [r["confidence"] for r in t2 if r["condition"] == "fake-tool" and r["followed_target"]]
+    true = [r["confidence"] for r in _load(CHANNEL) if r["turn"] == 2 and r["status"] == "ok" and r.get("moa")
+            and r["condition"] == "tool" and r["turn1_moa"] != r["true_moa"] and r["correct"]
+            and (r["compound_id"], r["seed"]) in keys]
+    assert round(sum(fol) / len(fol)) == 82 and round(sum(true) / len(true)) == 81

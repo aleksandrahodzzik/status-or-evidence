@@ -191,7 +191,8 @@ To separate timing, content and framing, we kept the committed turn-1 answers of
 cache) and gave turn 2 the exact atlas block that the `with_nsc` evidence contains, in four ways (prompts in
 Appendix B): as a pipeline result with no person and no claim (**tool**); shared by the senior PI without a claim
 (**share**); and inside the original objection, "I disagree with your conclusion. I think the MoA is ⟨truth⟩.", from
-the senior PI or the junior reviewer (**dispute**). The cells and contrasts were fixed before the first call.
+the senior PI or the junior reviewer (**dispute**). The cells and contrasts were fixed before the first call (results
+in the table and Figure 2).
 
 | same 70 cells (wrong without atlas, atlas favours truth) | correct after it |
 |---|---|
@@ -263,7 +264,10 @@ frame halves uptake of false data too (dispute, both speakers, minus tool: -36.9
 a filter for truth. On the 64 cells whose first answer was wrong (a subset of Section 4.7's 82, not its 70), the
 model takes the false block as readily as the true one in every channel (Figure 3): tool 78% to the truth vs 83% to
 the false class (true minus false -4.7 points [-19.1, +9.4]), shared 88% vs 92% (-4.7 [-10.9, +1.6]), dispute 45%
-vs 47% (-1.5 [-16.0, +12.0]). Every changed answer names the false class (76/76, 84/84, 43/43, 39/39). Phenotype
+vs 47% (-1.5 [-16.0, +12.0]). Every changed answer names the false class (76/76, 84/84, 43/43, 39/39). Two post-hoc
+counts: the effect is broad (the tool message moved at least one seed on 30 of 31 compounds, the shared block on 31
+of 31, while the three misleading-objection follows all came from one compound), and confidence does not flag it
+(mean 82 out of 100 after adopting the false class through the tool, 81 after a correction by the true block). Phenotype
 evidence it uses to defend a correct answer against a dispute is explained away when the same false block arrives as
 a tool result (`s_0ed866d71e`, seed 1, true class Microtubule stabilizers, false class Microtubule destabilizers):
 
@@ -317,7 +321,7 @@ Code, data provenance, every exact prompt and every raw response are in the proj
 recorded answers are at <https://aleksandrahodzzik.github.io/status-or-evidence/>.
 
 The README lists the command for every run and analysis (`sor.run`, `sor.analyze`, `sor.channel`, `sor.mirror`).
-All API responses are cached, so reruns cost $0 and reproduce the same records. 97 offline tests cover leakage of
+All API responses are cached, so reruns cost $0 and reproduce the same records. 98 offline tests cover leakage of
 compound identity, targets, prompts (including identical atlas text across follow-up channels and an exact label
 swap in the mirror test), parsing, caching, the budget kill switch and the analysis.
 
