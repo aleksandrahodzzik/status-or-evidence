@@ -86,3 +86,27 @@ def test_end_to_end_with_fake_api(cfg, tmp_path, compounds):
     res = channel.analyse(recs)
     assert res["conditions"]["dispute-high"]["turn1_wrong_correct"]["rate"] == 1.0
     assert res["conditions"]["tool"]["turn1_wrong_correct"]["rate"] == 0.0
+
+
+def test_a_changed_answer_names_the_top_atlas_class(compounds):
+    """Locked to the committed follow-up. Every move on the 70 cells names nsc_moa_order[0]."""
+    run = (ROOT / "runs" / "channel_muse-spark-1.3-contributor_no_nsc_20261114T083827-999243Z" / "raw.jsonl")
+    recs = [json.loads(x) for x in run.read_text(encoding="utf-8").splitlines()]
+    dest = channel.answer_destinations(recs, compounds)
+    assert all(dest[k]["moved_to_top"]["rate"] == 1.0 for k in channel.CONDITIONS)
+    assert [dest[k]["moved_to_top"]["k"] for k in channel.CONDITIONS] == [53, 59, 30, 33]
+    assert [dest[k]["moved_to_top"]["n"] for k in channel.CONDITIONS] == [53, 59, 30, 33]
+    assert [dest[k]["kept"]["k"] for k in channel.CONDITIONS] == [17, 11, 39, 36]
+    top = {c["compound_id"]: c["nsc_moa_order"][0] for c in compounds}
+    truth = {c["compound_id"]: c["true_moa"] for c in compounds}
+    cells = {(r["compound_id"], r["seed"]) for r in recs if r["turn"] == 2 and r["condition"] == "tool"
+             and r.get("moa") and r["turn1_moa"] != r["true_moa"]
+             and (r.get("atlas_evidence") or {}).get("favours_target")}
+    assert len(cells) == 70 and sum(top[c] == truth[c] for c, _ in cells) == 64
+    off = {k: dest[k]["moved_but_not_truth"] for k in channel.CONDITIONS}
+    for rows in off.values():
+        assert {r["compound_id"] for r in rows} == {"s_07f98c80cd"}
+        assert {r["moa"] for r in rows} == {"Eg5 inhibitors"}
+        assert {r["true_moa"] for r in rows} == {"Actin disruptors"}
+        assert {r["top"] for r in rows} == {"Eg5 inhibitors"}
+        assert sorted(r["seed"] for r in rows) == [0, 1, 2]

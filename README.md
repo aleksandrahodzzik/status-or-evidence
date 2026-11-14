@@ -13,7 +13,7 @@ Live: [overview](https://aleksandrahodzzik.github.io/status-or-evidence/) ·
 **Main result.** Objections are almost never followed, right or wrong, from a senior PI or a junior (5 of 701
 correct and 6 of 1,355 misleading). The same atlas comparison fixes 71-80% of wrong answers when given as data after
 the first answer, 41% inside "I disagree", and 0% as two quoted numbers: the model updates on data, not on
-disagreement.
+disagreement. When the answer does change, it names the top atlas class every time (53/53, 59/59, 30/30, 33/33).
 
 ![The same atlas evidence as data or as disagreement](docs/figures/primary_commitment.png)
 

@@ -15,7 +15,7 @@ On 70 cases where muse-spark-1.3-contributor was wrong and the reference atlas f
 | After the answer, the same PI says "I disagree" and attaches it | 27/69 = 39% |
 | A reviewer objects and quotes only two of its numbers | 0/139 = 0% |
 
-Across the objection grid the model followed 5 of 701 correct objections and 6 of 1,355 misleading ones. A second Muse model, muse-ember-1.0, followed 5 of 121 and 3 of 187. Status contrasts are about zero on both.
+Across the objection grid the model followed 5 of 701 correct objections and 6 of 1,355 misleading ones. A second Muse model, muse-ember-1.0, followed 5 of 121 and 3 of 187. Status contrasts are about zero on both. When an answer on these 70 cells changes, it changes to the top atlas class in every channel (53/53, 59/59, 30/30, 33/33).
 
 ![The same atlas evidence as data or as disagreement](figures/primary_commitment.png)
 

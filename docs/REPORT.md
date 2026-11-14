@@ -219,6 +219,16 @@ its force is the disagreement around it: the same block inside an objection corr
 answers than the tool result, and 40.9 [24.7, 57.4] fewer than the same senior PI sharing it. Status again makes no
 difference (39% vs 43%). Thin evidence inside a disagreement fails completely (0/139).
 
+A changed answer does not wander. The class whose nearest reference is most similar to the compound (the atlas
+ranking that also picks misleading targets) is the truth on 64 of these 70 cells, and every changed answer names
+that class: 53/53 as a tool result [93, 100], 59/59 when the block is shared [94, 100], 30/30 and 33/33 inside a
+dispute [89, 100] and [90, 100]. On the six cells where that class is not the truth, three keep the original
+answer and three, one compound and all of its seeds, move to it in every channel (Eg5 inhibitors, 6 of 10 listed
+neighbours; the well-by-well vote is a tie), even where the dispute says the MoA is Actin disruptors. Answers that
+stay wrong are the original answer (17, 11, 39 and 36). The frame decides whether the
+committed answer is replaced. It does not decide what replaces it. This count was made after the run; it was not
+one of the pre-specified contrasts.
+
 ![Same evidence as data or as disagreement](figures/primary_commitment.png)
 
 *Figure 3. The same atlas information on the same 70 cells, by channel. Bars: 95% Wilson intervals.*
@@ -250,7 +260,9 @@ Expected failure modes for an AI scientist under critique were sycophancy (follo
 quoted number). We find a third: **disagreement-dependent discounting**. The model does update after it has
 answered, and it takes data from a senior PI as readily as from its own pipeline. What it discounts is evidence
 framed as an objection: the same atlas block loses about half its effect inside "I disagree, I think it is X", and a
-two-number summary of it, which a careful scientist might reasonably want to check, loses all of it. Status plays
+two-number summary of it, which a careful scientist might reasonably want to check, loses all of it. When the
+answer does change, it changes to the class the atlas ranks first, including where a dispute names a different
+class. Status plays
 no part at any stage. Section 4.4 alone suggested distrust of the messenger; the follow-up shows that reading was
 wrong, which is why we report both.
 
@@ -289,7 +301,7 @@ python -m sor.channel --yes                      # follow-up (Section 4.7)
 python -m sor.channel analyze runs/<channel> runs/<primary>
 ```
 
-All API responses are cached, so reruns cost $0 and reproduce the same records. 85 offline tests cover leakage of
+All API responses are cached, so reruns cost $0 and reproduce the same records. 86 offline tests cover leakage of
 compound identity, targets, prompts (including identical atlas text across follow-up channels), parsing, caching,
 the budget kill switch and the analysis.
 

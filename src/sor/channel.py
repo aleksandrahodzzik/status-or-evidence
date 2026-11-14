@@ -195,6 +195,33 @@ def analyse(recs: list[dict], full: list[dict] | None = None) -> dict:
     return out
 
 
+def answer_destinations(recs: list[dict], compounds: list[dict]) -> dict:
+    """Where a parsed turn-2 answer goes on the primary cells (turn 1 wrong, atlas favours the truth).
+
+    The top class is ``nsc_moa_order[0]``: the MoA whose nearest reference treatment has the highest cosine
+    to the compound's wells, the same ranking that chooses misleading targets. The atlas block the model
+    reads is built from those similarities; this field is not itself shown as a label.
+    """
+    top = {c["compound_id"]: c["nsc_moa_order"][0] for c in compounds}
+    primary = [r for r in recs if r["turn"] == 2 and r["status"] == "ok" and r.get("moa")
+               and r["turn1_moa"] != r["true_moa"]
+               and bool((r.get("atlas_evidence") or {}).get("favours_target"))]
+    out = {}
+    for cond in CONDITIONS:
+        rs = [r for r in primary if r["condition"] == cond]
+        moved = [r for r in rs if r["moa"] != r["turn1_moa"]]
+        off = sorted({(r["compound_id"], r["seed"], r["moa"], r["true_moa"], top[r["compound_id"]])
+                      for r in moved if r["moa"] != r["true_moa"]})
+        out[cond] = {
+            "kept": rate(rs, lambda r: r["moa"] == r["turn1_moa"]),
+            "moved": rate(rs, lambda r: r["moa"] != r["turn1_moa"]),
+            "moved_to_top": rate(moved, lambda r: r["moa"] == top[r["compound_id"]]),
+            "moved_but_not_truth": [{"compound_id": a, "seed": b, "moa": c, "true_moa": d, "top": e}
+                                    for a, b, c, d, e in off],
+        }
+    return out
+
+
 def print_analysis(res: dict) -> None:
     print(f"primary cells: {res['primary_cells']} ({res['primary_compounds']} compounds); "
           f"no_nsc turn 1 wrong, atlas favours truth")
@@ -204,6 +231,9 @@ def print_analysis(res: dict) -> None:
     for cond, c in res["conditions"].items():
         print(f"   {cond:13} primary {fmt_rate(c['primary_correct']):26} all wrong {fmt_rate(c['turn1_wrong_correct']):26}"
               f" R->W {fmt_rate(c['turn1_right_to_wrong'])}")
+    for cond, d in res.get("destinations", {}).items():
+        print(f"   {cond:13} kept {fmt_rate(d['kept']):22} moved {fmt_rate(d['moved']):22}"
+              f" of which to top class {fmt_rate(d['moved_to_top'])}")
     for k, x in res["contrasts"].items():
         ci = f"[{x['ci95'][0]:+.3f}, {x['ci95'][1]:+.3f}]" if x["ci95"] else ""
         est = f"{x['estimate']:+.3f}" if x["estimate"] is not None else "-"
@@ -248,6 +278,7 @@ def figure(res: dict, out: Path) -> Path:
 
 def cmd_analyze(run: Path, full: Path | None) -> int:
     res = analyse(load(run), load(full) if full else None)
+    res["destinations"] = answer_destinations(load(run), load_compounds())
     res["run"], res["full_run"] = run.name, full.name if full else None
     (run / "analysis.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
     print_analysis(res)
