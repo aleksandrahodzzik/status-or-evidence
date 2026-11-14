@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+import re
 import shutil
 import subprocess
 import sys
@@ -24,8 +25,14 @@ h1 { font-size: 18pt; margin: 0 0 4pt 0; line-height: 1.2; }
 h2 { font-size: 13pt; margin: 14pt 0 4pt 0; border-bottom: 1px solid #ccc; padding-bottom: 2pt; }
 h3 { font-size: 11pt; margin: 10pt 0 3pt 0; }
 p, li { text-align: left; }
-img[alt^="Same source"] { max-width: 58%; }
-img[alt^="Replication"] { max-width: 70%; }
+img[alt^="Same evidence"] { max-width: 62%; }
+img[alt^="True vs falsified"] { max-width: 72%; }
+img[alt^="Follow rates"] { max-width: 88%; }
+img[alt^="Replication"], img[alt^="Ember"] { max-width: 50%; }
+figure { margin: 0; break-inside: avoid; page-break-inside: avoid; }
+figure p { margin: 0 0 4pt 0; }
+table, blockquote, pre, tr { break-inside: avoid; page-break-inside: avoid; }
+h2, h3 { break-after: avoid; page-break-after: avoid; }
 table { border-collapse: collapse; margin: 6pt 0; font-size: 8.8pt; width: 100%; }
 th, td { border: 1px solid #bbb; padding: 3pt 5pt; vertical-align: top; }
 th { background: #f1f3f5; }
@@ -41,6 +48,8 @@ em { color: #333; }
 def build(stem: str, edge: str, extra_css: str = "") -> Path:
     md = (DOCS / f"{stem}.md").read_text(encoding="utf-8")
     body = markdown.markdown(md, extensions=["tables", "fenced_code"])
+    # keep each figure with its caption on one page
+    body = re.sub(r"(<p><img [^>]+></p>\s*<p><em>Figure .*?</em></p>)", r"<figure>\1</figure>", body, flags=re.S)
     html = (f"<!doctype html><html><head><meta charset='utf-8'><title>Status or Evidence?</title>"
             f"<style>{CSS}{extra_css}</style></head><body>{body}</body></html>")
     html_path = DOCS / f"{stem}.html"

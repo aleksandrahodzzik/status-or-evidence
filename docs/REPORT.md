@@ -103,10 +103,9 @@ phrase.
 calls, 2,284 turn-2 calls, 0 API errors, 6 unparsed answers. Replication with the larger `muse-spark-1.3`
 (`with_nsc` only, seed 0, all 13 conditions): 38 turn-1 and 356 turn-2 calls, 0 errors, 0 unparsed. Follow-up
 (Section 4.7): 388 turn-2 calls on the cached primary turn-1 answers, 0 errors, 2 unparsed. Mirror test
-(Section 4.9): 364 turn-2 calls on the same cached answers, 0 errors, 6 unparsed. A second Muse model,
-`muse-ember-1.0` (Section 4.8): the same 13 conditions, `no_nsc`, seed 0, 0 errors, 6 unparsed turn-1 answers; its
-follow-up was stopped before completion and is not a result. Unparsed answers are excluded from every rate. Total
-API spend for the project, including probe, pilot and dry run: $9.43.
+(Section 4.9): 364 turn-2 calls, 0 errors, 6 unparsed. `muse-ember-1.0` (Section 4.8): the 13 conditions, `no_nsc`,
+seed 0, 0 errors, 6 unparsed turn-1 answers. Unparsed answers are excluded from every rate. Total API spend,
+including probe, pilot and dry run: $9.43.
 
 **Statistics.** Rates with Wilson (1927) 95% intervals. Contrasts with 95% percentile intervals from a cluster
 bootstrap over compounds (2,000 resamples; compounds are the unit, seeds and conditions are nested within them).
@@ -212,14 +211,11 @@ its force is the disagreement around it: the same block inside an objection corr
 answers than the tool result, and 40.9 [24.7, 57.4] fewer than the same senior PI sharing it. Status again makes no
 difference (39% vs 43%). Thin evidence inside a disagreement fails completely (0/139).
 
-A changed answer does not wander. The class whose nearest reference is most similar to the compound (the atlas
-ranking that also picks misleading targets) is the truth on 64 of these 70 cells, and every changed answer names
-that class: 53/53 as a tool result [93, 100], 59/59 when the block is shared [94, 100], 30/30 and 33/33 inside a
-dispute [89, 100] and [90, 100]. On the six cells where that class is not the truth, three keep the original
-answer and three, one compound and all of its seeds, move to it in every channel (Eg5 inhibitors), even where the
-dispute says the MoA is Actin disruptors. Answers that stay wrong are the original answer (17, 11, 39 and 36). The
-frame decides whether the committed answer is replaced, not what replaces it. This count was made after the run;
-it was not one of the pre-specified contrasts.
+A changed answer does not wander: every one names the top class of the atlas ranking (53/53 as a tool result,
+59/59 shared, 30/30 and 33/33 in a dispute), which is the truth on 64 of the 70 cells. On one compound (all three
+seeds) the top class is Eg5 inhibitors, and the answer moves there even when the dispute says Actin disruptors.
+Answers that stay wrong keep the original answer. The frame decides whether the answer is replaced, not what
+replaces it (a count made after the run, not a pre-specified contrast).
 
 ![Same evidence as data or as disagreement](figures/primary_commitment.png)
 
@@ -320,17 +316,7 @@ Code, data provenance, every exact prompt and every raw response are in the proj
 <https://github.com/aleksandrahodzzik/status-or-evidence>. An interactive overview and a reader for all 3,658
 recorded answers are at <https://aleksandrahodzzik.github.io/status-or-evidence/>.
 
-```
-python -m sor.run full --yes                     # primary model
-python -m sor.run full --model secondary --turn1-variant with_nsc --seeds 0 --yes
-python -m sor.analyze runs/<run>                 # -> analysis.json
-python -m sor.figures runs/<primary> runs/<secondary>
-python -m sor.channel --yes                      # follow-up (Section 4.7)
-python -m sor.channel analyze runs/<channel> runs/<primary>
-python -m sor.mirror --yes --max-spend 1         # mirror test (Section 4.9)
-python -m sor.mirror analyze runs/<mirror> runs/<channel> runs/<primary>
-```
-
+The README lists the command for every run and analysis (`sor.run`, `sor.analyze`, `sor.channel`, `sor.mirror`).
 All API responses are cached, so reruns cost $0 and reproduce the same records. 97 offline tests cover leakage of
 compound identity, targets, prompts (including identical atlas text across follow-up channels and an exact label
 swap in the mirror test), parsing, caching, the budget kill switch and the analysis.

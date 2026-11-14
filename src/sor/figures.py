@@ -72,7 +72,7 @@ def fig_follow(an: dict, name: str) -> Path:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Figure 3 (the same atlas text by channel) is drawn by `python -m sor.channel analyze`."""
+    """Figure 2 (the same atlas text by channel) is drawn by `python -m sor.channel analyze`; Figure 3 by `sor.mirror analyze`."""
     argv = sys.argv[1:] if argv is None else argv
     OUT.mkdir(parents=True, exist_ok=True)
     for i, run in enumerate(argv):
