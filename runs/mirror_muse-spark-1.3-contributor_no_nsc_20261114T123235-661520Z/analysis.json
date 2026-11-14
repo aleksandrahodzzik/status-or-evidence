@@ -269,6 +269,15 @@
    0.023
   ]
  },
+ "objection_right_to_wrong": {
+  "k": 0,
+  "n": 162,
+  "rate": 0.0,
+  "ci95": [
+   0.0,
+   0.023
+  ]
+ },
  "true_vs_fake": {
   "tool": {
    "true_uptake": {

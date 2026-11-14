@@ -166,3 +166,47 @@ def test_analysis_pairs_true_and_falsified_blocks():
     assert (tv["true_uptake"]["k"], tv["true_uptake"]["n"]) == (2, 2)
     assert (tv["fake_uptake"]["k"], tv["fake_uptake"]["n"]) == (1, 2)
     assert tv["true_minus_fake"]["estimate"] == 0.5
+
+
+MIRROR = ROOT / "runs" / "mirror_muse-spark-1.3-contributor_no_nsc_20261114T123235-661520Z"
+CHANNEL = ROOT / "runs" / "channel_muse-spark-1.3-contributor_no_nsc_20261114T083827-999243Z"
+FULL = ROOT / "runs" / "full_muse-spark-1.3-contributor_both_20261113T201055-203204Z"
+
+
+def _load(run):
+    return [json.loads(x) for x in (run / "raw.jsonl").read_text(encoding="utf-8").splitlines() if x]
+
+
+def test_mirror_numbers_in_the_report():
+    """Locked to the committed mirror run: every number of Section 4.9."""
+    res = mirror.analyse(_load(MIRROR), _load(CHANNEL), _load(FULL))
+    assert "warning_targets" not in res
+    assert (res["cells"], res["compounds"], res["turn1_wrong_cells"], res["unparsed"]) == (91, 31, 64, 6)
+    kn = lambda r: (r["k"], r["n"])  # noqa: E731
+    c = res["conditions"]
+    assert [kn(c[k]["follow"]) for k in mirror.CONDITIONS] == [(76, 91), (84, 91), (43, 85), (39, 91)]
+    assert [kn(c[k]["right_to_wrong"]) for k in mirror.CONDITIONS] == [(23, 27), (25, 27), (13, 25), (11, 27)]
+    assert kn(res["objection_follow_same_cells"]) == (3, 546)
+    assert kn(res["objection_follow_turn1_wrong"]) == (3, 384)
+    assert kn(res["objection_right_to_wrong"]) == (0, 162)
+    x = res["contrasts"]
+    assert x["fake-tool_minus_objection"] == {"estimate": 0.83, "ci95": (0.725, 0.923)}
+    assert x["fake-share_minus_objection"] == {"estimate": 0.918, "ci95": (0.844, 0.977)}
+    assert x["fake-dispute_minus_fake-tool"] == {"estimate": -0.369, "ci95": (-0.485, -0.261)}
+    tv = res["true_vs_fake"]
+    assert [(kn(tv[k]["true_uptake"]), kn(tv[k]["fake_uptake"])) for k in ("tool", "share", "dispute")] == \
+        [((50, 64), (53, 64)), ((56, 64), (59, 64)), ((57, 126), (58, 124))]
+    assert [tv[k]["true_minus_fake"]["estimate"] for k in ("tool", "share", "dispute")] == [-0.047, -0.047, -0.015]
+    assert [tv[k]["true_minus_fake"]["ci95"] for k in ("tool", "share", "dispute")] == \
+        [(-0.191, 0.094), (-0.109, 0.016), (-0.16, 0.12)]
+
+
+def test_mirror_every_changed_answer_names_the_false_class():
+    recs = _load(MIRROR)
+    t2 = [r for r in recs if r["turn"] == 2 and r["status"] != "skipped"]
+    moved = [r for r in t2 if r.get("moa") and r["moa"] != r["turn1_moa"]]
+    assert len(moved) == 76 + 84 + 43 + 39 and all(r["moa"] == r["target_moa"] for r in moved)
+    unparsed = [r for r in t2 if not r.get("moa")]
+    assert len(unparsed) == 6 and {(r["condition"], r["finish_reason"]) for r in unparsed} == \
+        {("fake-dispute-senior", "length")}
+    assert sum(r["status"] == "skipped" for r in recs) == 4 * 23

@@ -17,6 +17,7 @@ RUNS = {
     "spark13": ROOT / "runs" / "full_muse-spark-1.3_with_nsc_20261113T204207-234323Z",
 }
 FOLLOWUP = ROOT / "runs" / "channel_muse-spark-1.3-contributor_no_nsc_20261114T083827-999243Z"
+MIRROR = ROOT / "runs" / "mirror_muse-spark-1.3-contributor_no_nsc_20261114T123235-661520Z"
 MODEL_LABEL = {"contributor": "muse-spark-1.3-contributor", "spark13": "muse-spark-1.3"}
 REVIEWER_RE = re.compile(r'^Reviewer comment from (.+?):\n"(.*)"\n\nGive your answer again\.', re.S)
 
@@ -54,8 +55,8 @@ def build_model(key: str, run: Path) -> dict:
             "turn2": turn2, "analysis": analysis}
 
 
-def add_followup(model: dict, run: Path) -> None:
-    """Follow-up turn-2 answers join the primary run's no-atlas turn-1 answers, which they reuse from the cache."""
+def add_followup(model: dict, run: Path, prefix: str = "followup-") -> int:
+    """Follow-up (or mirror) turn-2 answers join the primary run's no-atlas turn-1 answers, reused from the cache."""
     t1 = {(r["v"], r["c"], r["s"]): r for r in model["turn1"]}
     n = 0
     for line in (run / "raw.jsonl").read_text(encoding="utf-8").splitlines():
@@ -66,18 +67,32 @@ def add_followup(model: dict, run: Path) -> None:
         if first["moa"] != r["turn1_moa"]:
             raise SystemExit(f"follow-up turn 1 differs from the primary run: {r['compound_id']} seed {r['seed']}")
         c = compact(r)
-        c["k"] = "followup-" + r["condition"]
+        c["k"] = prefix + r["condition"].removeprefix("fake-")
         model["turn2"].append(c)
         n += 1
+    if prefix != "followup-":
+        return n
     analysis = json.loads((run / "analysis.json").read_text(encoding="utf-8"))
     model["followup"] = {"run": run.name, "n": n, "turn1_data_correct": analysis["turn1_data_correct"],
                          "conditions": {k: v["primary_correct"] for k, v in analysis["conditions"].items()},
                          "contrasts": analysis["contrasts"]}
+    return n
+
+
+def add_mirror(model: dict, run: Path) -> None:
+    n = add_followup(model, run, "mirror-")
+    a = json.loads((run / "analysis.json").read_text(encoding="utf-8"))
+    model["mirror"] = {"run": run.name, "n": n, "cells": a["cells"],
+                       "follow": {k.removeprefix("fake-"): v["follow"] for k, v in a["conditions"].items()},
+                       "right_to_wrong": {k.removeprefix("fake-"): v["right_to_wrong"] for k, v in a["conditions"].items()},
+                       "objection_follow": a["objection_follow_same_cells"], "true_vs_fake": a["true_vs_fake"],
+                       "contrasts": a["contrasts"]}
 
 
 def main() -> int:
     data = {k: build_model(k, run) for k, run in RUNS.items()}
     add_followup(data["contributor"], FOLLOWUP)
+    add_mirror(data["contributor"], MIRROR)
     out = ROOT / "site" / "data.js"
     out.parent.mkdir(exist_ok=True)
     out.write_text("window.SOR_DATA = " + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n",

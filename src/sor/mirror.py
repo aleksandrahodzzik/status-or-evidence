@@ -203,6 +203,7 @@ def analyse(recs: list[dict], channel_recs: list[dict] | None = None, full: list
         out["objection_follow_same_cells"] = rate(obj, follow)
         out["objection_atlas_follow_same_cells"] = rate([r for r in obj if "_ev-atlas_" in r["condition"]], follow)
         out["objection_follow_turn1_wrong"] = rate([r for r in obj if r["_wrong1"]], follow)
+        out["objection_right_to_wrong"] = rate([r for r in obj if not r["_wrong1"]], lambda r: not r["correct"])
         rows = t2 + obj
         out["contrasts"]["fake-tool_minus_objection"] = boot(rows, ("fake-tool",), ("objection",), follow)
         out["contrasts"]["fake-share_minus_objection"] = boot(rows, ("fake-share",), ("objection",), follow)

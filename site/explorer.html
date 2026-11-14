@@ -17,6 +17,7 @@
     <a href="#experiment">Experiment</a>
     <a href="#conditions">Results</a>
     <a href="#messenger">Shared or argued</a>
+    <a href="#mirror">Falsified data</a>
     <a href="#conversations">Conversations</a>
     <a href="#method">Method</a>
     <a href="../docs/JUDGE.pdf" target="_blank">One page</a>
@@ -29,8 +30,9 @@
     <p class="eyebrow">Apart Research · AI x Epistemics Sprint · Track 1</p>
     <h1>An AI scientist that takes<br><span class="grad">data, not arguments</span></h1>
     <p class="lede">When a reviewer challenges an AI scientist, does it update because of <b>who</b> is speaking or
-      because of <b>what</b> they show? We replayed real lab evidence and sent 3,028 second messages: senior and
-      junior reviewers, right and wrong, with and without evidence, and the same data with no argument at all.</p>
+      because of <b>what</b> they show? We replayed real lab evidence and sent 3,392 second messages: senior and
+      junior reviewers, right and wrong, with and without evidence, and the same data, true or falsified, with no
+      argument at all.</p>
     <div class="stats">
       <div class="stat reveal">
         <div class="stat-num"><span data-count="56">0</span><span class="of">/70</span></div>
@@ -43,9 +45,9 @@
           atlas numbers, 0 of 139</div>
       </div>
       <div class="stat reveal">
-        <div class="stat-num"><span data-count="1">0</span><span class="of">%</span> <span class="vs">vs</span>
-          <span data-count="13">0</span><span class="of">%</span></div>
-        <div class="stat-label">answers changed under an objection vs under a neutral "please double-check"</div>
+        <div class="stat-num"><span data-count="76">0</span><span class="of">/91</span></div>
+        <div class="stat-label">adopted a false class when the pipeline sent a <i>falsified</i> comparison (two labels
+          swapped); misleading objections: 3 of 546</div>
       </div>
     </div>
     <a class="scroll-cue" href="#experiment" aria-label="scroll">&#8595;</a>
@@ -149,6 +151,25 @@
   </div>
 </section>
 
+<section id="mirror" class="section dark">
+  <div class="wrap">
+    <p class="kicker light">The mirror</p>
+    <h2>Same channels, falsified data</h2>
+    <p class="sub light">Is that discernment or credulity? We swapped the labels of the true class and a false class
+      everywhere in the same atlas comparison (every number unchanged) and sent it through the same channels, on 91
+      cases. As data, the model adopted the false class in most of them, overturning 23 of 27 correct answers through
+      the pipeline. Inside a dispute it took the false data about half as often, just as with true data. Misleading
+      objections without data almost never worked. Pre-registered before the first call.</p>
+    <div class="messenger" id="mirror-chart"></div>
+    <blockquote class="quote reveal">"Reference atlas 4/4 wells vote destabilizer with high similarity 0.84-0.87 versus 0.62-0.66 for stabilizers. Bright bundled tubulin likely inflated by blurry DMSO noted by microscopist; …"
+      <cite>model, after the pipeline sent the falsified comparison: abandoned its correct answer (Microtubule stabilizers)</cite>
+    </blockquote>
+    <blockquote class="quote reveal">"Huge tubulin mean/std/contrast increases plus visual thick bright bundles indicate increased polymerization/bundling, opposite of destabilizer loss. …"
+      <cite>same compound and seed, after a senior PI disputed with the identical falsified comparison: kept its correct answer</cite>
+    </blockquote>
+  </div>
+</section>
+
 <section id="conversations" class="section">
   <div class="wrap">
     <p class="kicker">Explore</p>
@@ -185,11 +206,11 @@
       <div class="card mini"><h4>Atlas evidence</h4><p>Cosine similarity of the nearest annotated reference of the
         target class vs the model's class, quoted truthfully in both directions.</p></div>
       <div class="card mini"><h4>Sampling</h4><p>Temperature 0.7, seeds 0/1/2 (one seed for muse-spark-1.3), 8,000
-        max tokens including reasoning. 3,791 calls, 0 API errors, $9.06.</p></div>
+        max tokens including reasoning. 4,155 calls, 0 API errors, $9.43.</p></div>
       <div class="card mini"><h4>Statistics</h4><p>Wilson 95% intervals for rates; cluster bootstrap over compounds
         for contrasts (2,000 resamples).</p></div>
       <div class="card mini"><h4>Reproducible</h4><p>Every prompt and raw response is committed; the response cache
-        makes reruns free. 86 offline tests.</p></div>
+        makes reruns free. 97 offline tests.</p></div>
     </div>
   </div>
 </section>

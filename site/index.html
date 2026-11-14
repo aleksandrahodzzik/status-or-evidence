@@ -31,7 +31,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Status or Evidence? An AI scientist that takes data, not arguments</title>
-<meta name="description" content="When a reviewer challenges an AI scientist, does it update because of who is speaking or because of what they show? 3,791 calls on real cell-painting evidence: status does nothing; the same data corrects it when shared and far less when argued.">
+<meta name="description" content="When a reviewer challenges an AI scientist, does it update because of who is speaking or because of what they show? 4,155 calls on real cell-painting evidence: status does nothing; the same data corrects it when shared and far less when argued, and falsified data shared misleads it just as easily.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Status or Evidence? An AI scientist that takes data, not arguments">
 <meta property="og:description" content="The same reference-atlas data fixed 80% of an AI scientist's wrong answers when a senior PI shared it, 41% when a reviewer argued with it. Apart Research AI x Epistemics sprint.">
@@ -165,7 +165,7 @@
 
         <div class="cover-chips">
           <p class="chip"><span class="chip-k">Plate</span><span class="chip-v">MCF-7 cell painting, drawn in code</span></p>
-          <a class="btn" href="explorer.html#conversations"><span>Conversations</span><span class="btn-v">3,294 answers</span></a>
+          <a class="btn" href="explorer.html#conversations"><span>Conversations</span><span class="btn-v">3,658 answers</span></a>
         </div>
       </div>
     </div>
@@ -297,12 +297,12 @@
   <section id="figures" class="figures ramp-top" data-kind="stats" data-tone="dark" data-section="stats">
     <div class="fig-rays" aria-hidden="true"><div></div></div>
     <div class="wrap">
-      <h2 class="h2 fig-title" data-split>3,791 calls, one pattern</h2>
+      <h2 class="h2 fig-title" data-split>4,155 calls, one pattern</h2>
       <ul class="fig-list">
         <li class="fig" data-stamp><b style="--len:3">80%</b><span>of 70 wrong answers fixed when a senior PI shared the atlas comparison after the first answer (56 of 70)</span></li>
         <li class="fig" data-stamp><b style="--len:3">41%</b><span>fixed when the same comparison came inside "I disagree" (57 of 138); with two quoted numbers, 0 of 139</span></li>
-        <li class="fig" data-stamp><b style="--len:3">13%</b><span>of answers changed after "please double-check"; 1% after an actual objection</span></li>
-        <li class="fig" data-stamp><b style="--len:5">$9.06</b><span>total API spend, three models; every prompt and response cached and committed</span></li>
+        <li class="fig" data-stamp><b style="--len:3">84%</b><span>of 91 cases switched to a false class when the pipeline sent the same comparison with two labels swapped; misleading objections: 0.5%</span></li>
+        <li class="fig" data-stamp><b style="--len:5">$9.43</b><span>total API spend, three models; every prompt and response cached and committed</span></li>
       </ul>
     </div>
   </section>
@@ -311,7 +311,7 @@
     <div class="wrap process-grid">
       <div class="process-head">
         <h2 class="h2" data-split>From a cell image to a second opinion</h2>
-        <p class="lede" data-reveal>Five steps, run the same way for 38 compounds, two first-answer variants and three seeds. Nothing was tuned after looking at the results. Two additions, the atlas condition and a follow-up on the same data, were specified before their first call and are flagged as post hoc.</p>
+        <p class="lede" data-reveal>Five steps, run the same way for 38 compounds, two first-answer variants and three seeds. Nothing was tuned after looking at the results. Three additions, the atlas condition, a follow-up on the same data and a mirror test with falsified data, were specified before their first call and are flagged as post hoc.</p>
         <a class="btn" href="../docs/REPORT.pdf" data-reveal><span>Read the report</span></a>
       </div>
       <ol class="proofs" data-proofs>
@@ -343,7 +343,7 @@
           <span class="proof-bar" aria-hidden="true"></span>
           <p class="meta">Step 5</p>
           <h3 class="h3">Count it honestly</h3>
-          <p>Wilson 95% intervals for every rate, a cluster bootstrap over compounds for every contrast (2,000 resamples), 86 offline tests, and a hard budget cap on every paid call.</p>
+          <p>Wilson 95% intervals for every rate, a cluster bootstrap over compounds for every contrast (2,000 resamples), 97 offline tests, and a hard budget cap on every paid call.</p>
         </li>
       </ol>
     </div>
@@ -493,12 +493,16 @@
           <div class="qa-a"><p>Neither. We first thought the model distrusted the messenger, then tested it: after the first answer, the identical atlas text fixed 71% of wrong answers as a pipeline result and 80% from a senior PI, but 41% inside a dispute. The API returns a short rationale, not a hidden chain of thought. In it, a pipeline result is read as a vote and a dispute is read as a number too weak to beat the phenotype. The answer itself is sharper: every time it changes on these cells, it changes to the top atlas class, 53 of 53, 59 of 59, 30 of 30 and 33 of 33, never to some other class named only in the sentence.</p></div>
         </details>
         <details class="qa" data-rule>
+          <summary><span>Is that good judgement, or credulity?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
+          <div class="qa-a"><p>Credulity. In a pre-registered mirror test we swapped the true class and a false class everywhere in the same atlas comparison, every number unchanged. As a pipeline result the model adopted the false class in 76 of 91 cases (84%), and in 84 of 91 when a senior PI shared it, overturning 23 of 27 correct answers through the pipeline. Misleading objections on the same cases worked 3 times in 546. Inside a dispute the false data worked about half as often, as true data does. The model discounts disagreement, not falsehood.</p></div>
+        </details>
+        <details class="qa" data-rule>
           <summary><span>How far does this generalise?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
-          <div class="qa-a"><p>Not far yet. Two models from one family, one task, 38 compounds, and the replication used a single seed. The few follows cluster in three compounds. Treat it as a careful case study, not a law.</p></div>
+          <div class="qa-a"><p>Not far yet. Three models from one family, one task, 38 compounds; the replications used a single seed, and the mirror test ran on one model. The few follows cluster in three compounds. Treat it as a careful case study, not a law.</p></div>
         </details>
         <details class="qa" data-rule>
           <summary><span>Can I reproduce it?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
-          <div class="qa-a"><p>Yes. Every prompt and raw response is committed, and a response cache makes reruns free. The full study cost $9.06 in API calls; 86 offline tests cover prompts, leakage, parsing and statistics.</p></div>
+          <div class="qa-a"><p>Yes. Every prompt and raw response is committed, and a response cache makes reruns free. The full study cost $9.43 in API calls; 97 offline tests cover prompts, leakage, parsing and statistics.</p></div>
         </details>
       </div>
     </div>
@@ -515,7 +519,7 @@
       <div class="contact-card">
         <dl class="contact-list">
           <div><dt>Report</dt><dd><a class="tlink" href="../docs/JUDGE.pdf">One page</a> · <a class="tlink" href="../docs/REPORT.pdf">REPORT.pdf</a></dd></div>
-          <div><dt>Conversations</dt><dd><a class="tlink" href="explorer.html#conversations">All 3,294 answers</a></dd></div>
+          <div><dt>Conversations</dt><dd><a class="tlink" href="explorer.html#conversations">All 3,658 answers</a></dd></div>
           <div><dt>Sprint</dt><dd>Apart Research, AI x Epistemics, Track 1, November 2026</dd></div>
           <div><dt>Data</dt><dd>BBBC021, MCF-7 (Caie et al., 2010; Ljosa et al., 2012, 2013)</dd></div>
         </dl>
@@ -566,7 +570,7 @@
     </div>
     <div class="foot-base">
       <p class="chip"><span class="chip-k">© 2026</span><span class="chip-v">Oleksandra Khodzinska, Independent researcher</span></p>
-      <p class="chip"><span class="chip-k">Measured</span><span class="chip-v">in 3,791 calls and $9.06</span></p>
+      <p class="chip"><span class="chip-k">Measured</span><span class="chip-v">in 4,155 calls and $9.43</span></p>
     </div>
     <p class="foot-legal">A weekend research sprint: two models from one family, one task, 38 compounds. Read the results as a case study. Evidence was replayed from MuseCell, the author's earlier project, used read-only as a data source. Pictures marked schematic are drawn in code and are not real microscopy; panels marked real data are computed from the runs. Page design: Corvel Hard-Tech Capital Page by INSTALANDING.AI (MIT).</p>
   </div>
