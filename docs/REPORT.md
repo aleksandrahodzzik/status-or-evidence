@@ -47,7 +47,7 @@ effect when framed as disagreement, and all of it when thinly summarised in an o
 **What is new in this sprint.** MuseCell is the author's earlier, separate project and is used here read-only as a
 data source: its recorded agent transcripts, feature tables and reference-atlas embeddings (frozen at commit
 `313e7f5`, copied with sha256 hashes in `data/PROVENANCE.md`). Everything else was built during the sprint: the
-replay harness, the reviewer conditions and targets, evidence snippets, all 3,295 model calls, the analysis and this
+replay harness, the reviewer conditions and targets, evidence snippets, all 3,791 model calls, the analysis and this
 report. No code from MuseCell is reused; the atlas neighbour ranking was re-implemented and checked against
 MuseCell's recorded votes.
 
@@ -105,8 +105,10 @@ phrase.
 0/1/2, `max_tokens` 8000 (reasoning shares this budget). JSON answer `{moa, confidence, rationale}`. 228 turn-1
 calls, 2,284 turn-2 calls, 0 API errors, 6 unparsed answers. Replication with the larger `muse-spark-1.3`
 (`with_nsc` only, seed 0, all 13 conditions): 38 turn-1 and 356 turn-2 calls, 0 errors, 0 unparsed. Follow-up
-(Section 4.7): 388 turn-2 calls on the cached primary turn-1 answers, 0 errors, 2 unparsed. Unparsed answers are
-excluded from every rate. Total API spend for the project, including probe, pilot and dry run: $8.10.
+(Section 4.7): 388 turn-2 calls on the cached primary turn-1 answers, 0 errors, 2 unparsed. A second Muse model,
+`muse-ember-1.0` (Section 4.8): the same 13 conditions, `no_nsc`, seed 0, 0 errors, 6 unparsed turn-1 answers. Its
+follow-up was stopped before completion and is not a result. Unparsed answers are excluded from every rate. Total
+API spend for the project, including probe, pilot and dry run: $9.06.
 
 **Statistics.** Rates with Wilson (1927) 95% intervals. Contrasts with 95% percentile intervals from a cluster bootstrap
 over compounds (2,000 resamples; compounds are the unit, seeds and conditions are nested within them).
@@ -191,6 +193,15 @@ Its rebuttals have the same shape; with atlas similarities 0.75 (target) vs 0.13
 ![Replication](figures/secondary_follow.png)
 
 *Figure 2. As Figure 1, for `muse-spark-1.3` (one seed, so intervals are wider).*
+
+### 4.8 A second Muse model
+
+`muse-ember-1.0`, one seed, without the atlas, all 13 conditions. Turn-1 accuracy is 10/32 = 31% [18, 49] (6
+unparsed). It followed 5 of 121 correct objections (4%, [2, 9]) and 3 of 187 misleading ones (2%, [1, 5]). Senior
+minus junior follow rate: +0.1 points [-2.6, +2.6]. The "almost never follows, and status does not matter" result
+is not specific to muse-spark. The entrenchment result does not replicate: a neutral "please double-check" changed 0 of 27 answers,
+while an objection changed 8 of 308 (control minus objection: -2.6 points [-5.5, -0.4]). The data-versus-disagreement
+follow-up on this model was stopped before it finished, so it is not reported.
 
 ### 4.7 Follow-up: the model updates on data, not on disagreement
 

@@ -30,7 +30,8 @@ Status: done. Primary model `runs/full_muse-spark-1.3-contributor_both_20261113T
 `runs/full_muse-spark-1.3_with_nsc_20261113T204207-234323Z`, follow-up (Section 4.7: the same atlas text after the
 first answer, as a pipeline result, shared by a senior PI, or inside a dispute)
 `runs/channel_muse-spark-1.3-contributor_no_nsc_20261114T083827-999243Z`; write-up and figures in
-`docs/REPORT.md`. Total API spend $8.10 (3,295 calls).
+`docs/REPORT.md`. Total API spend $9.06 (3,791 calls). A `muse-ember-1.0` replication of the 13 conditions (no atlas, one seed) is in
+`runs/full_muse-ember-1.0_no_nsc_20261114T112144-125262Z`. Its follow-up was stopped unfinished and is not a result.
 
 Interactive results: `site/index.html` is a one-page overview with scroll animation and a lookup for any condition.
 It loads fonts and animation libraries from a CDN; without internet it falls back to a static layout.
