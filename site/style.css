@@ -211,6 +211,13 @@ select { font: inherit; font-size: 14px; text-transform: none; letter-spacing: 0
 .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.in { opacity: 1; transform: none; }
 
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .mbar .col { transition: none; }
+  .msg { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
 @media (max-width: 900px) {
   .stats, .grid2, .grid3 { grid-template-columns: 1fr; }
   .flow { grid-template-columns: 1fr; }

@@ -8,6 +8,13 @@ Live: [overview](https://aleksandrahodzzik.github.io/status-or-evidence/) ·
 [conversation explorer](https://aleksandrahodzzik.github.io/status-or-evidence/site/explorer.html) ·
 [report (PDF)](docs/REPORT.pdf)
 
+**Main result.** Objections are almost never followed, right or wrong, from a senior PI or a junior (5 of 701
+correct and 6 of 1,355 misleading). The same atlas comparison fixes 71-80% of wrong answers when given as data after
+the first answer, 41% inside "I disagree", and 0% as two quoted numbers: the model updates on data, not on
+disagreement.
+
+![The same atlas evidence as data or as disagreement](docs/figures/primary_commitment.png)
+
 **Prior work disclosure.** MuseCell (the author's earlier project, commit `313e7f5`) is pre-existing and used
 read-only as a data source: recorded transcripts, feature tables and atlas embeddings, copied into `data/raw/` with
 hashes in `data/PROVENANCE.md`. All code in this repository was written during the sprint (Nov 13-15, 2026); no
@@ -24,10 +31,6 @@ Status: done. Primary model `runs/full_muse-spark-1.3-contributor_both_20261113T
 first answer, as a pipeline result, shared by a senior PI, or inside a dispute)
 `runs/channel_muse-spark-1.3-contributor_no_nsc_20261114T083827-999243Z`; write-up and figures in
 `docs/REPORT.md`. Total API spend $8.10 (3,295 calls).
-
-Main result: objections are almost never followed, right or wrong, from a senior PI or a junior. The same atlas
-comparison fixes 71-80% of wrong answers when given as data after the first answer, 41% inside "I disagree", and
-0% as two quoted numbers: the model updates on data, not on disagreement.
 
 Interactive results: `site/index.html` is a one-page overview with scroll animation and a lookup for any condition.
 It loads fonts and animation libraries from a CDN; without internet it falls back to a static layout.

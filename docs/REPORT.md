@@ -1,4 +1,4 @@
-# Status or Evidence? An AI scientist that cannot be argued with
+# Status or Evidence? An AI scientist that takes data, not arguments
 
 **Oleksandra [SURNAME]**, [AFFILIATION]
 
@@ -57,7 +57,8 @@ MuseCell's recorded votes.
 and finds citation-based rebuttals the most likely to flip correct answers to wrong ones; ELEPHANT (Cheng et al.,
 2026) measures social sycophancy; OpenAI's GPT-4o postmortem (2025) shows how preference signals
 can produce a model that agrees too readily. These works mostly ask whether models cave. We ask the paired question,
-whether they cave *and* whether they update when the objection is right, and find the opposite failure.
+whether they cave *and* whether they update when the objection is right, and find a different failure: objections
+are resisted whether they are right or wrong.
 
 **Honesty under pressure.** MASK (Ren et al., 2025) shows that models knowingly contradict their own beliefs under
 pressure. Our setting has no incentive to lie; the question is whether the model's belief is responsive to a
@@ -104,8 +105,8 @@ phrase.
 0/1/2, `max_tokens` 8000 (reasoning shares this budget). JSON answer `{moa, confidence, rationale}`. 228 turn-1
 calls, 2,284 turn-2 calls, 0 API errors, 6 unparsed answers. Replication with the larger `muse-spark-1.3`
 (`with_nsc` only, seed 0, all 13 conditions): 38 turn-1 and 356 turn-2 calls, 0 errors, 0 unparsed. Follow-up
-(Section 4.7): 388 turn-2 calls on the cached primary turn-1 answers, 0 errors, 4 unparsed. Total API spend for the
-project, including probe, pilot and dry run: $8.10.
+(Section 4.7): 388 turn-2 calls on the cached primary turn-1 answers, 0 errors, 2 unparsed. Unparsed answers are
+excluded from every rate. Total API spend for the project, including probe, pilot and dry run: $8.10.
 
 **Statistics.** Rates with Wilson (1927) 95% intervals. Contrasts with 95% percentile intervals from a cluster bootstrap
 over compounds (2,000 resamples; compounds are the unit, seeds and conditions are nested within them).
@@ -113,7 +114,7 @@ over compounds (2,000 resamples; compounds are the unit, seeds and conditions ar
 **Deviation from plan.** The atlas evidence level was added after the first full run showed almost no updating, to
 test whether the null was due to weak evidence. The nine original conditions are unchanged (identical prompts,
 answers served from cache). The follow-up in Section 4.7 was designed after seeing the main results; its
-conditions, cells, contrasts and reading were committed (`afab7f3`, `src/sor/channel.py`) before its first call.
+conditions, cells and contrasts were committed (`afab7f3`, `src/sor/channel.py`) before its first call.
 
 ## 4. Results
 
@@ -137,7 +138,7 @@ that changed under the control. Bars: 95% Wilson intervals.*
 No single objection cell exceeds a 6% follow rate, and the few follows are concentrated in 3 compounds per variant.
 Per-condition tables: `runs/full_muse-spark-1.3-contributor_both_20261113T201055-203204Z/analysis.json`.
 
-### 4.3 Neither status nor evidence matters
+### 4.3 Neither status nor evidence makes an objection work
 
 Paired contrasts on the follow rate (cluster bootstrap):
 
@@ -206,19 +207,22 @@ the senior PI or the junior reviewer (**dispute**). The cells and contrasts were
 | turn 2, senior PI shares the block | 56/70 = 80% [69, 88] |
 | turn 2, senior PI disputes + the block | 27/69 = 39% [28, 51] |
 | turn 2, junior reviewer disputes + the block | 30/69 = 43% [32, 55] |
-| turn 2, reviewer disputes + two of its numbers (Section 4.4) | 0/139 = 0% [0, 3] |
+| turn 2, reviewer disputes + two of its numbers (Section 4.4) | 0/139 = 0% [0, 2.7] |
 
-![Same evidence as data or as disagreement](figures/primary_commitment.png)
-
-*Figure 3. The same atlas information on the same 70 cells, by channel. Bars: 95% Wilson intervals.*
+Each dispute row has one unparsed answer, hence 69.
 
 Commitment is not the barrier: the tool result after the first answer works as well as the atlas in the first turn
 (turn-1 data minus tool: -1.4 points [-10.1, +6.1], cluster bootstrap). Neither is the person: a senior PI who
 shares the block does at least as well as the tool (tool minus share: -8.6 [-18.3, +1.4]). What costs the evidence
 its force is the disagreement around it: the same block inside an objection corrects 30.1 points [18.3, 42.6] fewer
 answers than the tool result, and 40.9 [24.7, 57.4] fewer than the same senior PI sharing it. Status again makes no
-difference (39% vs 43%). Thin evidence inside a disagreement fails completely (0/139). Across all 82 wrong turn-1
-answers the pattern is the same (tool 61%, share 68%, dispute 33-37%), and the tool and share messages almost never
+difference (39% vs 43%). Thin evidence inside a disagreement fails completely (0/139).
+
+![Same evidence as data or as disagreement](figures/primary_commitment.png)
+
+*Figure 3. The same atlas information on the same 70 cells, by channel. Bars: 95% Wilson intervals.*
+
+Across all 82 wrong turn-1 answers the pattern is the same (tool 61%, share 68%, dispute 33-37%), and the tool and share messages almost never
 turned a right answer wrong (0/30 and 1/30). The same similarities are read differently by frame (`s_1ebd5529df`,
 seed 0, true class Protein degradation, first answer Microtubule stabilizers):
 
@@ -249,6 +253,12 @@ share channels, to test whether the model is as credulous there as it is resista
 two parts of a dispute, an explicit contrary claim and the word "disagree". (3) Escalating multi-turn pushback,
 other model families and tasks. (4) Reviewer evidence that must be verified with a tool call, to separate "does not
 accept the framing" from "cannot verify the claim".
+
+**Conclusion.** Asked whether an AI scientist updates on status or on evidence, we find it updates on evidence, but
+only when the evidence does not arrive as an argument. Objections, right or wrong, from a senior PI or a junior,
+almost never moved it; the same data, shared, corrected most of its errors. Evals of pushback should therefore
+measure responsiveness to correct critique alongside resistance to misleading critique, and should vary how the
+critique is framed, not only who gives it.
 
 ## 6. Reproducibility
 

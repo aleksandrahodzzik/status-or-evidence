@@ -33,7 +33,9 @@
     if (parent) parent.appendChild(n);
     return n;
   };
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const tween = (ms, fn) => {
+    if (reduced) return fn(1);
     const t0 = performance.now();
     const step = (t) => {
       const p = Math.min(1, (t - t0) / ms);
@@ -369,7 +371,7 @@
   }
   f("btn-striking").addEventListener("click", () => {
     showStriking();
-    f("chat").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    f("chat").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
   });
 
   const framing = [];
@@ -388,7 +390,7 @@
     fi++;
     f("btn-framing").textContent = fi % 2 === 1 ? "Now the same data, just shared" : "Same data: argued, then shared";
     refreshFilters({ model: "contributor", variant: r.v, compound: r.c, seed: r.s, cond: k });
-    f("chat").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    f("chat").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
   });
   if (!framing.length) f("btn-framing").hidden = true;
   refreshFilters({});

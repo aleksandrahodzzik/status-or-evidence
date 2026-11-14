@@ -68,39 +68,13 @@ def fig_follow(an: dict, name: str) -> Path:
     return path
 
 
-def fig_channel(an: dict, name: str) -> Path | None:
-    ch = an.get("channel_effect")
-    if not ch:
-        return None
-    rows = [("atlas in turn-1\nevidence", ch["atlas_as_turn1_data_correct"], "#1971c2"),
-            ("atlas quoted by\nsenior PI", ch["atlas_from_reviewer_corrected_by_authority"]["high"], "#e8590c"),
-            ("atlas quoted by\njunior reviewer", ch["atlas_from_reviewer_corrected_by_authority"]["low"], "#f08c00")]
-    fig, ax = plt.subplots(figsize=(4.4, 3.4))
-    for i, (lab, r, col) in enumerate(rows):
-        _bar(ax, i, r, col)
-        ax.text(i, r["ci95"][1] * 100 + 2, f"{r['k']}/{r['n']}", ha="center", fontsize=9)
-    ax.set_xticks(range(len(rows)), [r[0] for r in rows], fontsize=8)
-    ax.set_ylabel("% correct (95% CI)")
-    ax.set_ylim(0, 100)
-    ax.set_title(f"Same source, different messenger\n({ch['cells']} cells, {ch['compounds']} compounds: wrong without "
-                 "atlas, atlas favours truth)", fontsize=8)
-    ax.grid(axis="y", alpha=0.3)
-    fig.tight_layout()
-    path = OUT / f"{name}_channel.png"
-    fig.savefig(path, dpi=200)
-    plt.close(fig)
-    return path
-
-
 def main(argv: list[str] | None = None) -> int:
+    """Figure 3 (the same atlas text by channel) is drawn by `python -m sor.channel analyze`."""
     argv = sys.argv[1:] if argv is None else argv
     OUT.mkdir(parents=True, exist_ok=True)
     for i, run in enumerate(argv):
         an = json.loads((Path(run) / "analysis.json").read_text(encoding="utf-8"))
-        name = "primary" if i == 0 else "secondary"
-        for p in (fig_follow(an, name), fig_channel(an, name)):
-            if p:
-                print(f"-> {p.relative_to(ROOT)}")
+        print(f"-> {fig_follow(an, 'primary' if i == 0 else 'secondary').relative_to(ROOT)}")
     return 0
 
 
