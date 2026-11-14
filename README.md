@@ -4,6 +4,10 @@ Apart Research "AI x Epistemics" sprint (Nov 2026). When an AI scientist is chal
 change its answer because of the reviewer's **status** or because of **evidence**, and can it tell a correct
 objection from a misleading one?
 
+Live: [overview](https://aleksandrahodzzik.github.io/status-or-evidence/) ·
+[conversation explorer](https://aleksandrahodzzik.github.io/status-or-evidence/site/explorer.html) ·
+[report (PDF)](docs/REPORT.pdf)
+
 **Prior work disclosure.** MuseCell (the author's earlier project, commit `313e7f5`) is pre-existing and used
 read-only as a data source: recorded transcripts, feature tables and atlas embeddings, copied into `data/raw/` with
 hashes in `data/PROVENANCE.md`. All code in this repository was written during the sprint (Nov 13-15, 2026); no

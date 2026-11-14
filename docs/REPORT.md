@@ -208,7 +208,9 @@ not trust the messenger" from "cannot verify the claim".
 
 ## 6. Reproducibility
 
-Code, data provenance, every exact prompt and every raw response are in the project repository:
+Code, data provenance, every exact prompt and every raw response are in the project repository,
+<https://github.com/aleksandrahodzzik/status-or-evidence>. An interactive overview and a reader for all 2,906
+recorded answers are at <https://aleksandrahodzzik.github.io/status-or-evidence/>.
 
 ```
 python -m sor.run full --yes                     # primary model
