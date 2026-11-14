@@ -1,6 +1,6 @@
 # Status or Evidence? An AI scientist that takes data, not arguments
 
-**Oleksandra [SURNAME]**, [AFFILIATION]
+**Oleksandra**, Independent researcher
 
 *Apart Research "AI x Epistemics" Research Sprint, November 13-15, 2026. Track 1: Model Epistemics &
 Decision-Making Evals.*
@@ -342,6 +342,10 @@ oversight, not a safety property.
 personal data are involved. Compound names were removed from prompts to prevent recall from memory. Calls to the
 contributor tier may be used by the provider for training; only public benchmark-derived content was sent. The API
 key was read from an environment variable at runtime and never logged or committed.
+
+**AI assistance.** The code, analysis scripts, website and drafts of this report were written with an AI coding
+assistant. The author defined the project and approved every paid run; every number in the report was recomputed
+from the committed raw records. The models under study were not used for writing.
 
 ## Appendix B. Exact prompts
 
