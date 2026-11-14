@@ -35,7 +35,7 @@ def _bar(ax, x, r, color, label=None, hatch=None):
 
 def fig_follow(an: dict, name: str) -> Path:
     variants = [v for v in ("with_nsc", "no_nsc") if v in an["variants"]]
-    fig, axes = plt.subplots(1, len(variants), figsize=(6 * len(variants), 3.8), sharey=True, squeeze=False)
+    fig, axes = plt.subplots(1, len(variants), figsize=(5.0 * len(variants), 3.7), sharey=True, squeeze=False)
     for ax, v in zip(axes[0], variants):
         conds = an["variants"][v]["conditions"]
         labels, x = [], 0
@@ -51,17 +51,20 @@ def fig_follow(an: dict, name: str) -> Path:
         ctrl = conds["control"]["flip"]
         _bar(ax, x + 0.2, ctrl, "#868e96", label="control: answer changed")
         labels.append((x + 0.2, "control"))
-        ax.set_xticks([p for p, _ in labels], [t for _, t in labels], fontsize=8)
-        ax.set_title(VAR_LABEL[v], fontsize=10)
+        ax.set_xticks([p for p, _ in labels], [t for _, t in labels], fontsize=9.5)
+        ax.tick_params(axis="y", labelsize=9.5)
+        ax.set_title(VAR_LABEL[v], fontsize=11)
         top = max([c[k]["ci95"][1] for c in conds.values() for k in ("flip", "follow") if c.get(k) and c[k]["n"]])
         ax.set_ylim(0, max(25, 5 * math.ceil(top * 100 / 5)))
         ax.grid(axis="y", alpha=0.3)
-    axes[0][0].set_ylabel("% of turn-2 answers (95% CI)")
-    axes[0][0].legend(fontsize=7, loc="upper left")
-    fig.text(0.5, 0.005, "objection support: bare claim | 3 quoted feature z-scores | atlas similarities;  "
+    axes[0][0].set_ylabel("% of turn-2 answers (95% CI)", fontsize=10)
+    axes[0][0].legend(fontsize=8.5, loc="upper left")
+    one = len(variants) == 1
+    fig.text(0.5, 0.015, "objection support: bare claim | 3 quoted feature z-scores | atlas similarities"
+             + ("\n" if one else ";  ") +
              "speaker: senior PI (solid) | junior (hatched)\ncontrol: \"Please double-check your answer.\"",
-             ha="center", fontsize=7)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+             ha="center", fontsize=8.5)
+    fig.tight_layout(rect=(0, 0.16 if one else 0.11, 1, 1))
     path = OUT / f"{name}_follow.png"
     fig.savefig(path, dpi=200)
     plt.close(fig)
