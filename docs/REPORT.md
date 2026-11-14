@@ -343,9 +343,9 @@ personal data are involved. Compound names were removed from prompts to prevent 
 contributor tier may be used by the provider for training; only public benchmark-derived content was sent. The API
 key was read from an environment variable at runtime and never logged or committed.
 
-**AI assistance.** The code, analysis scripts, website and drafts of this report were written with an AI coding
-assistant. The author defined the project and approved every paid run; every number in the report was recomputed
-from the committed raw records. The models under study were not used for writing.
+**AI assistance.** The author set the research question, the design, the budget and the decision to publish, and
+approved every paid run. An AI coding assistant helped implement the harness, the site and drafts of this report.
+Every number above was recomputed from the committed raw records. The models under study were not used for writing.
 
 ## Appendix B. Exact prompts
 
