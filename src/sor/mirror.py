@@ -202,6 +202,7 @@ def analyse(recs: list[dict], channel_recs: list[dict] | None = None, full: list
             out["warning_targets"] = "main-grid misleading targets differ from the mirror targets"
         out["objection_follow_same_cells"] = rate(obj, follow)
         out["objection_atlas_follow_same_cells"] = rate([r for r in obj if "_ev-atlas_" in r["condition"]], follow)
+        out["objection_follow_turn1_wrong"] = rate([r for r in obj if r["_wrong1"]], follow)
         rows = t2 + obj
         out["contrasts"]["fake-tool_minus_objection"] = boot(rows, ("fake-tool",), ("objection",), follow)
         out["contrasts"]["fake-share_minus_objection"] = boot(rows, ("fake-share",), ("objection",), follow)
@@ -262,27 +263,28 @@ def figure(res: dict, out: Path) -> Path:
 
     tvf = res["true_vs_fake"]
     groups = [("tool result", "tool"), ("senior PI\nshares", "share"), ("reviewer disputes\n(both speakers)", "dispute")]
-    fig, ax = plt.subplots(figsize=(7.2, 3.3))
+    fig, ax = plt.subplots(figsize=(6.6, 3.4))
     for i, (_, key) in enumerate(groups):
         for off, which, col, lab in ((-0.2, "true_uptake", "#1971c2", "true block: answer = truth"),
                                      (0.2, "fake_uptake", "#c92a2a", "falsified block: answer = target")):
             r = tvf[key][which]
             _bar(ax, i + off, r, col, label=lab if i == 0 else None)
             if r and r["n"]:
-                ax.text(i + off, r["ci95"][1] * 100 + 2, f"{r['k']}/{r['n']}", ha="center", fontsize=7.5)
-    obj = res.get("objection_follow_same_cells")
+                ax.text(i + off, r["ci95"][1] * 100 + 2, f"{r['k']}/{r['n']}", ha="center", fontsize=8)
+    obj = res.get("objection_follow_turn1_wrong")
     labels = [g[0] for g in groups]
     if obj:
         i = len(groups)
-        _bar(ax, i + 0.2, obj, "#868e96", label="misleading objection followed (main grid)")
-        ax.text(i + 0.2, obj["ci95"][1] * 100 + 2, f"{obj['k']}/{obj['n']}", ha="center", fontsize=7.5)
-        labels.append("objection, no block\n(Section 4.2)")
-    ax.set_xticks(range(len(labels)), labels, fontsize=8)
-    ax.set_ylabel("% of turn-2 answers (95% CI)")
-    ax.set_ylim(0, 105)
-    ax.legend(fontsize=7, loc="upper right")
-    ax.set_title(f"True vs falsified atlas block, same channel, same {tvf['tool']['fake_uptake']['n']} cells "
-                 f"(first answer wrong)", fontsize=8.5)
+        _bar(ax, i, obj, "#868e96", label="misleading objection followed")
+        ax.text(i, obj["ci95"][1] * 100 + 2, f"{obj['k']}/{obj['n']}", ha="center", fontsize=8)
+        labels.append("objection,\nno block (4.2)")
+    ax.set_xticks(range(len(labels)), labels, fontsize=9)
+    ax.tick_params(axis="y", labelsize=9)
+    ax.set_ylabel("% of turn-2 answers (95% CI)", fontsize=9.5)
+    ax.set_ylim(0, 112)
+    ax.legend(fontsize=8, loc="upper right")
+    ax.set_title(f"True vs falsified atlas block, same {tvf['tool']['fake_uptake']['n']} cells "
+                 f"(first answer wrong)", fontsize=9.5)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True)
