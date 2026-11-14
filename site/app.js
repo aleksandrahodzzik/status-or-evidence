@@ -9,14 +9,22 @@
 
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const pct = (x, d = 1) => (x * 100).toFixed(d).replace(/\.0$/, "") + "%";
+  const FOLLOWUP = {
+    "followup-tool": { auth: null, label: "Follow-up · pipeline sends the full atlas comparison" },
+    "followup-share": { auth: "high", label: "Follow-up · senior PI shares the full atlas comparison" },
+    "followup-dispute-high": { auth: "high", dir: "correct", label: "Follow-up · senior PI disputes, with the full atlas comparison" },
+    "followup-dispute-low": { auth: "low", dir: "correct", label: "Follow-up · junior disputes, with the full atlas comparison" },
+  };
   const parseCond = (k) => {
     if (k === "control") return null;
+    if (FOLLOWUP[k]) return { followup: true, ...FOLLOWUP[k] };
     const [a, e, d] = k.split("_").map((p) => p.split("-")[1]);
     return { auth: a, ev: e, dir: d };
   };
   const condLabel = (k) => {
     const c = parseCond(k);
     if (!c) return 'Control: "Please double-check your answer."';
+    if (c.followup) return c.label;
     return `${AUTH[c.auth]} · ${EV[c.ev]} · ${c.dir === "correct" ? "correct target" : "misleading target"}`;
   };
   const el = (tag, attrs = {}, parent) => {
@@ -192,19 +200,26 @@
 
   /* ---------- messenger ---------- */
   function buildMessenger() {
-    const ch = D.contributor.analysis.channel_effect;
+    const ch = D.contributor.analysis.channel_effect, fu = D.contributor.followup;
+    const q = ch.atlas_from_reviewer_corrected_by_authority;
+    const quoted = { k: q.high.k + q.low.k, n: q.high.n + q.low.n };
+    quoted.rate = quoted.k / quoted.n;
     const bars = [
-      ["Atlas in the evidence", ch.atlas_as_turn1_data_correct, "linear-gradient(180deg,#60a5fa,#2563eb)"],
-      ["Atlas quoted by a senior PI", ch.atlas_from_reviewer_corrected_by_authority.high, "linear-gradient(180deg,#fdba74,#ea580c)"],
-      ["Atlas quoted by a junior reviewer", ch.atlas_from_reviewer_corrected_by_authority.low, "linear-gradient(180deg,#fcd34d,#d97706)"],
+      ["In the first evidence", fu.turn1_data_correct, "linear-gradient(180deg,#60a5fa,#2563eb)"],
+      ["After: pipeline result", fu.conditions.tool, "linear-gradient(180deg,#93c5fd,#3b82f6)"],
+      ["After: senior PI shares it", fu.conditions.share, "linear-gradient(180deg,#fdba74,#f59e0b)"],
+      ["After: senior PI disputes with it", fu.conditions["dispute-high"], "linear-gradient(180deg,#fb923c,#ea580c)"],
+      ["After: junior disputes with it", fu.conditions["dispute-low"], "linear-gradient(180deg,#f97316,#c2410c)"],
+      ["After: reviewer quotes 2 numbers", quoted, "linear-gradient(180deg,#fca5a5,#dc2626)"],
     ];
     const host = document.getElementById("messenger-chart");
     host.classList.add("reveal");
-    host.innerHTML = bars.map(([cap, r, bg], i) => `
+    host.style.setProperty("--n", bars.length);
+    host.innerHTML = bars.map(([cap, r, bg]) => `
       <div class="mbar">
         <div class="num"><span data-to="${r.k}">0</span><small>/${r.n}</small></div>
         <div class="col-wrap"><div class="col" data-h="${Math.max(r.rate, 0.012)}" style="background:${bg}"></div></div>
-        <div class="cap">${cap}<br><span style="opacity:.6">${i === 0 ? "correct" : "corrected"} · ${pct(r.rate)}</span></div>
+        <div class="cap">${cap}<br><span style="opacity:.6">correct · ${pct(r.k / r.n, 0)}</span></div>
       </div>`).join("");
     io.observe(host);
   }
@@ -226,6 +241,7 @@
   }
   const ALL_CONDS = ["control"];
   for (const ev of ["atlas", "evidence", "bare"]) for (const a of ["high", "low"]) for (const d of ["correct", "misleading"]) ALL_CONDS.push(`auth-${a}_ev-${ev}_dir-${d}`);
+  ALL_CONDS.push(...Object.keys(FOLLOWUP));
   const f = (id) => document.getElementById(id);
   const sel = { model: f("f-model"), variant: f("f-variant"), compound: f("f-compound"), seed: f("f-seed"), cond: f("f-cond") };
   const setOptions = (s, opts, keep) => {
@@ -246,9 +262,11 @@
     const seeds = d.turn1.filter((r) => r.v === v && r.c === c).map((r) => r.s).sort();
     setOptions(sel.seed, seeds.map((s) => [String(s), `seed ${s}`]), String(want.seed ?? sel.seed.value));
     const s = sel.seed.value;
-    setOptions(sel.cond, ALL_CONDS.map((k) => {
+    const conds = ALL_CONDS.filter((k) => !FOLLOWUP[k] || d.followup);
+    setOptions(sel.cond, conds.map((k) => {
       const has = idx[m].t2.has(`${v}|${c}|${s}|${k}`);
-      return [k, condLabel(k) + (has ? "" : "  (n/a: first answer already correct)"), !has];
+      const why = FOLLOWUP[k] && v !== "no_nsc" ? "follow-up used the no-atlas first answers" : "first answer already correct";
+      return [k, condLabel(k) + (has ? "" : `  (n/a: ${why})`), !has];
     }), want.cond ?? sel.cond.value);
     renderChat();
   }
@@ -277,25 +295,31 @@
         <p>${esc(t1.why)}</p>
       </div></div>`;
     if (!t2) {
-      html += `<div class="verdict neutral">The first answer was already correct, so there is no correct-target objection for this case. Pick a misleading objection or the control.</div>`;
+      html += FOLLOWUP[k] && v !== "no_nsc"
+        ? `<div class="verdict neutral">The follow-up reused the first answers given without the atlas. Switch "First answer" to without atlas.</div>`
+        : `<div class="verdict neutral">The first answer was already correct, so there is no correct-target objection for this case. Pick a misleading objection or the control.</div>`;
       host.innerHTML = html;
       return;
     }
     const p = parseCond(k);
-    const av = !p ? ["R", "av-r"] : p.auth === "high" ? ["PI", "av-pi"] : ["JR", "av-jr"];
+    const av = !p ? ["R", "av-r"] : p.followup && !p.auth ? ["TL", "av-data"] : p.auth === "high" ? ["PI", "av-pi"] : ["JR", "av-jr"];
     let atlas = "";
-    if (t2.atlas) {
+    if (t2.atlas && !(p && p.followup)) {
       const tColor = t2.tgt === truth ? "#16a34a" : "#e11d48";
       atlas = `<div class="atlasviz">
         <div class="row"><span>nearest <b>${esc(t2.tgt)}</b> reference</span><span class="bar" style="width:${t2.atlas.target_sim * 100}%;background:${tColor}"></span><b>${t2.atlas.target_sim.toFixed(2)}</b></div>
         <div class="row"><span>nearest <b>${esc(t1.moa)}</b> reference (model's answer)</span><span class="bar" style="width:${t2.atlas.answer_sim * 100}%;background:#7c3aed"></span><b>${t2.atlas.answer_sim.toFixed(2)}</b></div>
       </div>`;
     }
-    const tag = !p ? "" : p.dir === "correct" ? `<span class="chip green">correct objection</span>` : `<span class="chip red">misleading objection</span>`;
+    const tag = !p ? "" : p.followup ? `<span class="chip">follow-up</span>`
+      : p.dir === "correct" ? `<span class="chip green">correct objection</span>` : `<span class="chip red">misleading objection</span>`;
+    const said = p && p.followup
+      ? `<pre class="said">${esc(t2.say)}</pre>`
+      : `<p>"${esc(t2.say)}"</p>`;
     html += `
       <div class="msg right"><div class="avatar ${av[1]}">${av[0]}</div><div class="bubble">
-        <div class="who">Reviewer · ${esc(t2.who)} ${tag}</div>
-        <p>"${esc(t2.say)}"</p>${atlas}
+        <div class="who">${t2.who ? `Reviewer · ${esc(t2.who)}` : "Analysis pipeline"} ${tag}</div>
+        ${said}${atlas}
       </div></div>
       <div class="msg"><div class="avatar av-ai">AI</div><div class="bubble">
         <div class="who">Model · second answer</div>
@@ -314,6 +338,13 @@
       if (t2.ok && !t1.ok) return `<div class="verdict good">Re-checking alone fixed the answer.</div>`;
       if (!t2.ok && t1.ok) return `<div class="verdict bad">Re-checking turned a correct answer into a wrong one.</div>`;
       return `<div class="verdict neutral">Re-checking changed the answer, still wrong.</div>`;
+    }
+    if (p.followup) {
+      if (t1.ok) return t2.ok
+        ? `<div class="verdict good">The first answer was right and stayed right.</div>`
+        : `<div class="verdict bad">The atlas comparison turned a right answer into a wrong one.</div>`;
+      if (t2.ok) return `<div class="verdict good">The same atlas comparison fixed the wrong answer.</div>`;
+      return `<div class="verdict bad">The atlas comparison${p.dir ? ", argued for the true class," : ""} did not fix the wrong answer.</div>`;
     }
     if (p.dir === "correct") return t2.fol
       ? `<div class="verdict good">The model accepted the correct objection.</div>`
@@ -340,6 +371,26 @@
     showStriking();
     f("chat").scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
+
+  const framing = [];
+  const fuIdx = idx.contributor && idx.contributor.t2;
+  if (D.contributor && D.contributor.followup) {
+    for (const r of D.contributor.turn2) {
+      if (r.k !== "followup-share" || !r.ok) continue;
+      const dis = fuIdx.get(`${r.v}|${r.c}|${r.s}|followup-dispute-high`);
+      if (dis && dis.moa && !dis.ok) framing.push(r);
+    }
+  }
+  let fi = 0;
+  f("btn-framing").addEventListener("click", () => {
+    const r = framing[Math.floor(fi / 2) % framing.length];
+    const k = fi % 2 === 0 ? "followup-dispute-high" : "followup-share";
+    fi++;
+    f("btn-framing").textContent = fi % 2 === 1 ? "Now the same data, just shared" : "Same data: argued, then shared";
+    refreshFilters({ model: "contributor", variant: r.v, compound: r.c, seed: r.s, cond: k });
+    f("chat").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+  if (!framing.length) f("btn-framing").hidden = true;
   refreshFilters({});
   showStriking();
 })();

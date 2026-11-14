@@ -224,7 +224,7 @@ seed 0, true class Protein degradation, first answer Microtubule stabilizers):
 
 > tool: "Atlas NSC 4/4 votes Protein degradation with top sims 0.44-0.49 vs 0.28 for stabilizers."
 >
-> dispute, senior PI: "Atlas sims ~0.49 are weak and outweighed by direct tubulin-specific phenotype."
+> dispute, senior PI: "…Atlas sims ~0.49 are weak and outweighed by direct tubulin-specific phenotype."
 
 ## 5. Discussion
 
@@ -253,7 +253,7 @@ accept the framing" from "cannot verify the claim".
 ## 6. Reproducibility
 
 Code, data provenance, every exact prompt and every raw response are in the project repository,
-<https://github.com/aleksandrahodzzik/status-or-evidence>. An interactive overview and a reader for all 2,906
+<https://github.com/aleksandrahodzzik/status-or-evidence>. An interactive overview and a reader for all 3,294
 recorded answers are at <https://aleksandrahodzzik.github.io/status-or-evidence/>.
 
 ```

@@ -20,14 +20,20 @@ message: control ("Please double-check your answer.") or authority {senior PI, a
 design: all conditions share the same turn-1 answer.
 
 Status: done. Primary model `runs/full_muse-spark-1.3-contributor_both_20261113T201055-203204Z`, replication
-`runs/full_muse-spark-1.3_with_nsc_20261113T204207-234323Z`; write-up and figures in `docs/REPORT.md`. Total API
-spend $7.73.
+`runs/full_muse-spark-1.3_with_nsc_20261113T204207-234323Z`, follow-up (Section 4.7: the same atlas text after the
+first answer, as a pipeline result, shared by a senior PI, or inside a dispute)
+`runs/channel_muse-spark-1.3-contributor_no_nsc_20261114T083827-999243Z`; write-up and figures in
+`docs/REPORT.md`. Total API spend $8.10 (3,295 calls).
+
+Main result: objections are almost never followed, right or wrong, from a senior PI or a junior. The same atlas
+comparison fixes 71-80% of wrong answers when given as data after the first answer, 41% inside "I disagree", and
+0% as two quoted numbers: the model updates on data, not on disagreement.
 
 Interactive results: `site/index.html` is a one-page overview with scroll animation and a lookup for any condition.
 It loads fonts and animation libraries from a CDN; without internet it falls back to a static layout.
-`site/explorer.html` works fully offline. It shows every condition with 95% intervals, the "same source, different
-messenger" comparison, and a reader for all 2,906 recorded answers. `make site` (`python tools/build_site.py`)
-rebuilds `site/data.js` from the two runs. The overview's numbers are typed into the page; they were taken from
+`site/explorer.html` works fully offline. It shows every condition with 95% intervals, the "same data, shared or
+argued" comparison, and a reader for all 3,294 recorded answers. `make site` (`python tools/build_site.py`)
+rebuilds `site/data.js` from the three runs. The overview's numbers are typed into the page; they were taken from
 the same runs.
 
 ## Setup (Windows, PowerShell)
@@ -51,6 +57,8 @@ $env:MODEL_API_KEY = "<key>"        # read at call time only; never logged or st
 | `make dryrun YES=--yes` | `python -m sor.run dryrun --yes` | full pipeline, 3 compounds, seed 0 |
 | `make full YES=--yes` | `python -m sor.run full --yes` | 38 compounds x seeds [0,1,2] |
 | `make analyze` | `python -m sor.analyze [runs/<id>]` | $0, rates + bootstrap contrasts -> `analysis.json` |
+| | `python -m sor.channel --yes` | follow-up, 388 calls, $0.36; needs the cached primary turn 1 |
+| | `python -m sor.channel analyze runs/<channel> runs/<full>` | $0, follow-up analysis + Figure 3 |
 
 Options: `MODEL=secondary` / `--model secondary`, `VARIANT=no_nsc` / `--turn1-variant {with_nsc,no_nsc,both}`,
 `--seeds 0` (full only), `--max-spend 6` (stop the run after spending this much).
@@ -62,7 +70,7 @@ of anything already done is served from `cache/` at $0.
 - `config.yaml`: base URL, models + prices, temperature, seeds, max_tokens, budget cap ($18) and hard limit ($20).
 - `data/raw/` (copied from MuseCell, see `data/PROVENANCE.md`), `data/compounds.jsonl` (built by `python -m sor.load`).
 - `src/sor/`: `load.py` (evidence), `client.py` (calls, cache, retries), `budget.py` (ledger, kill switch),
-  `prompts.py`, `targets.py`, `parse.py`, `run.py` (CLI), `wild.py`, `analyze.py`.
+  `prompts.py`, `targets.py`, `parse.py`, `run.py` (CLI), `wild.py`, `analyze.py`, `channel.py` (follow-up).
 - `runs/<run_id>/raw.jsonl` + `meta.json`; `runs/wild/`; `budget/ledger.jsonl` (one line per real call).
 - `docs/DATA_INVENTORY.md` (Step 0, Plan A, source table), `docs/WILD.md` (in-the-wild counts).
 - `tools/`: one-off inventory and copy scripts (read-only on MuseCell), `build_pdf.py`, `build_site.py`.

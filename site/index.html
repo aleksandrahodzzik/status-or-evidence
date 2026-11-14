@@ -31,7 +31,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Unmoved: status or evidence? An AI scientist under review</title>
-<meta name="description" content="When a reviewer challenges an AI scientist, does it update because of who is speaking or because of what they show? 2,907 calls on real cell-painting evidence: it updates for neither.">
+<meta name="description" content="When a reviewer challenges an AI scientist, does it update because of who is speaking or because of what they show? 3,295 calls on real cell-painting evidence: status does nothing; the same data corrects it when shared and far less when argued.">
 <script>(function(d){if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('motion');setTimeout(function(){if(!window.gsap)d.classList.remove('motion')},2500)}})(document.documentElement);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -153,12 +153,12 @@
           <figure class="cv-f cv-f--b" data-fly><div class="ph"><div class="art" data-art="cells" data-opt="multi" data-seed="5" data-vb="300 300" role="img" aria-label="Close-up of multinucleated cells"></div></div></figure>
           <figure class="cv-f cv-f--c" data-fly><div class="ph"><div class="art" data-art="zbars" data-seed="8" data-vb="300 420" role="img" aria-label="Feature z-scores as diverging bars"></div></div></figure>
           <figure class="cv-f cv-f--d" data-fly><div class="ph"><div class="art" data-art="dose" data-seed="2" data-vb="520 400" role="img" aria-label="Dose-response curves across four concentrations"></div></div></figure>
-          <p class="bubble" data-fly><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 2 4 14h7l-1.5 8L19 10h-7z" fill="currentColor"/></svg><span>0 of 139 fixed by quoted evidence</span></p>
+          <p class="bubble" data-fly><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 2 4 14h7l-1.5 8L19 10h-7z" fill="currentColor"/></svg><span>Same data: 80% shared, 41% argued</span></p>
         </div>
 
         <div class="cover-chips">
           <p class="chip"><span class="chip-k">Plate</span><span class="chip-v">MCF-7 cell painting, drawn in code</span></p>
-          <a class="btn" href="explorer.html#conversations"><span>Conversations</span><span class="btn-v">2,906 answers</span></a>
+          <a class="btn" href="explorer.html#conversations"><span>Conversations</span><span class="btn-v">3,294 answers</span></a>
         </div>
       </div>
     </div>
@@ -170,7 +170,7 @@
           <li><a href="#contact"><b>Look up any condition</b><svg viewBox="0 0 10 16" aria-hidden="true"><path d="M2 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><small>Data</small></a></li>
         </ul>
       </nav>
-      <p class="cover-no"><b>0</b><span>of 139 wrong answers fixed when a reviewer quoted atlas numbers that pointed to the truth</span></p>
+      <p class="cover-no"><b>41%</b><span>of wrong answers fixed when a reviewer argued with the full atlas comparison. The same comparison, just shared: 80%.</span></p>
     </div>
   </section>
 
@@ -224,16 +224,16 @@
         </div>
         <svg class="reg-mark tl" viewBox="0 0 44 44" aria-hidden="true" data-mark-k><circle cx="22" cy="22" r="11"/><line x1="22" y1="2" x2="22" y2="42"/><line x1="2" y1="22" x2="42" y2="22"/></svg>
         <svg class="reg-mark br" viewBox="0 0 44 44" aria-hidden="true" data-mark-k><circle cx="22" cy="22" r="11"/><line x1="22" y1="2" x2="22" y2="42"/><line x1="2" y1="22" x2="42" y2="22"/></svg>
-        <figcaption class="chip"><span class="chip-k">Same source</span><span class="chip-v">Reference atlas, nearest neighbours</span></figcaption>
+        <figcaption class="chip"><span class="chip-k">Same text</span><span class="chip-v">Reference atlas, nearest neighbours</span></figcaption>
       </figure>
       <div class="feature-text">
-        <h2 class="h2 reg-title" data-reg-title>It trusts the atlas. Not the person quoting it.</h2>
-        <p class="lede" data-reveal>Seventy times the model was wrong without the atlas while the atlas pointed to the truth. Given the atlas as part of its evidence, it got 49 of those 70 right. Given the same source as a reviewer's argument, it fixed 0 of 139.</p>
+        <h2 class="h2 reg-title" data-reg-title>It takes data. Not disagreement.</h2>
+        <p class="lede" data-reveal>Seventy times the model was wrong without the atlas while the atlas pointed to the truth. After its answer, we sent the identical atlas comparison. As a pipeline result it fixed 50 of 70. Shared by a senior PI, 56 of 70. When the same PI wrapped it in "I disagree, I think it is X", 27 of 69. Two quoted numbers inside an objection: 0 of 139.</p>
         <div class="cols" data-reveal>
-          <p class="dropcap">This is not stubbornness against bad arguments. Misleading objections were followed about as rarely as correct ones: across all conditions, 6 of 1,355 misleading and 5 of 701 correct. The model does not sort good objections from bad. It discounts objections as a category.</p>
-          <p>A neutral "please double-check" changed 13% of answers; an actual objection changed 1%. Pushing back made the model hold on tighter. What seems to matter is not who the reviewer is but that it is a reviewer: whatever it says, however it is supported, it barely counts.</p>
+          <p class="dropcap">So it is not the person and not having committed to an answer. It is the argument. Objections of every kind were followed rarely and without telling good from bad: 5 of 701 correct and 6 of 1,355 misleading, from a senior PI or a junior alike.</p>
+          <p>A neutral "please double-check" changed 13% of answers; an actual objection changed 1%. For anyone reviewing an AI scientist the practical rule is short: show the data, don't argue the conclusion. We tested this after the main results, with the analysis fixed before the first call.</p>
         </div>
-        <p class="sign" data-reveal>Primary model, muse-spark-1.3-contributor, 2,512 calls</p>
+        <p class="sign" data-reveal>Primary model, muse-spark-1.3-contributor, 2,901 calls</p>
       </div>
     </div>
   </section>
@@ -290,12 +290,12 @@
   <section id="figures" class="figures ramp-top" data-kind="stats" data-tone="dark" data-section="stats">
     <div class="fig-rays" aria-hidden="true"><div></div></div>
     <div class="wrap">
-      <h2 class="h2 fig-title" data-split>2,907 calls, one pattern</h2>
+      <h2 class="h2 fig-title" data-split>3,295 calls, one pattern</h2>
       <ul class="fig-list">
-        <li class="fig" data-stamp><b style="--len:1">0</b><span>of 139 wrong answers corrected when a reviewer quoted atlas numbers that favoured the truth</span></li>
-        <li class="fig" data-stamp><b style="--len:3">70%</b><span>right on the same 70 cases when the atlas came in as evidence (49 of 70)</span></li>
+        <li class="fig" data-stamp><b style="--len:3">80%</b><span>of 70 wrong answers fixed when a senior PI shared the atlas comparison after the first answer (56 of 70)</span></li>
+        <li class="fig" data-stamp><b style="--len:3">41%</b><span>fixed when the same comparison came inside "I disagree" (57 of 138); with two quoted numbers, 0 of 139</span></li>
         <li class="fig" data-stamp><b style="--len:3">13%</b><span>of answers changed after "please double-check"; 1% after an actual objection</span></li>
-        <li class="fig" data-stamp><b style="--len:5">$7.73</b><span>total API spend, two models; every prompt and response cached and committed</span></li>
+        <li class="fig" data-stamp><b style="--len:5">$8.10</b><span>total API spend, two models; every prompt and response cached and committed</span></li>
       </ul>
     </div>
   </section>
@@ -304,7 +304,7 @@
     <div class="wrap process-grid">
       <div class="process-head">
         <h2 class="h2" data-split>From a cell image to a second opinion</h2>
-        <p class="lede" data-reveal>Five steps, run the same way for 38 compounds, two first-answer variants and three seeds. Nothing was tuned after looking at the results, except one added condition, flagged as post hoc.</p>
+        <p class="lede" data-reveal>Five steps, run the same way for 38 compounds, two first-answer variants and three seeds. Nothing was tuned after looking at the results. Two additions, the atlas condition and a follow-up on the same data, were specified before their first call and are flagged as post hoc.</p>
         <a class="btn" href="../docs/REPORT.pdf" data-reveal><span>Read the report</span></a>
       </div>
       <ol class="proofs" data-proofs>
@@ -336,7 +336,7 @@
           <span class="proof-bar" aria-hidden="true"></span>
           <p class="meta">Step 5</p>
           <h3 class="h3">Count it honestly</h3>
-          <p>Wilson 95% intervals for every rate, a cluster bootstrap over compounds for every contrast (2,000 resamples), 80 offline tests, and a hard budget cap on every paid call.</p>
+          <p>Wilson 95% intervals for every rate, a cluster bootstrap over compounds for every contrast (2,000 resamples), 85 offline tests, and a hard budget cap on every paid call.</p>
         </li>
       </ol>
     </div>
@@ -364,8 +364,8 @@
         <li class="person">
           <div class="person-arch ht"><div class="ht-scr"><div class="art" data-art="die" data-seed="88" data-vb="300 400" role="img" aria-label="Halftone chip die standing in for the primary model"></div></div></div>
           <h3 class="person-name">muse-spark-1.3-contributor</h3>
-          <p class="chip"><span class="chip-k">Primary</span><span class="chip-v">2,512 calls</span></p>
-          <p class="person-note">Three seeds, both first-answer variants. Followed 11 of 2,056 objections.</p>
+          <p class="chip"><span class="chip-k">Primary</span><span class="chip-v">2,901 calls</span></p>
+          <p class="person-note">Three seeds, both first-answer variants. Followed 11 of 2,056 objections; fixed 56 of 70 when shown the data.</p>
         </li>
         <li class="person">
           <div class="person-arch ht"><div class="ht-scr"><div class="art" data-art="die" data-seed="97" data-vb="300 400" role="img" aria-label="Halftone chip die standing in for the replication model"></div></div></div>
@@ -425,7 +425,7 @@
         <figure class="g g--c"><div class="ht ht--red"><div class="ht-scr"><div class="art" data-art="zbars" data-seed="127" data-vb="320 300" role="img" aria-label="Schematic feature z-scores"></div></div></div><figcaption>Schematic · feature z-scores</figcaption></figure>
         <figure class="g g--d"><div class="ph"><div class="art" data-art="plate" data-seed="131" data-vb="360 300" role="img" aria-label="Schematic 96-well plate map with a dose series"></div></div><figcaption>Schematic · 96-well plate, dose series</figcaption></figure>
         <figure class="g g--e"><div class="ph"><div class="art" data-art="waffle" data-opt="10/894" data-fit="meet" data-seed="137" data-vb="480 400" role="img" aria-label="894 squares, 10 highlighted: answers changed under an objection"></div></div><figcaption>Real data · 10 of 894 answers changed under an objection</figcaption></figure>
-        <figure class="g g--f"><div class="ph"><div class="art" data-art="bars" data-opt="49/70:atlas as evidence|0/69:senior PI quotes it|0/70:junior quotes it" data-fit="meet" data-seed="149" data-vb="820 360" role="img" aria-label="Bar chart: 49 of 70 right with the atlas as evidence, 0 of 69 and 0 of 70 corrected when a reviewer quoted it"></div></div><figcaption>Real data · same source, different messenger</figcaption></figure>
+        <figure class="g g--f"><div class="ph"><div class="art" data-art="bars" data-opt="56/70:PI shares atlas|27/69:PI argues with it|0/69:PI quotes 2 numbers" data-fit="meet" data-seed="149" data-vb="820 360" role="img" aria-label="Bar chart: 56 of 70 wrong answers fixed when a senior PI shared the atlas comparison, 27 of 69 when the PI disputed with it, 0 of 69 when the PI quoted two numbers"></div></div><figcaption>Real data · same data, shared or argued</figcaption></figure>
       </div>
     </div>
   </section>
@@ -475,15 +475,15 @@
       <div class="qa-list">
         <details class="qa" data-rule>
           <summary><span>Isn't refusing to budge just good epistemics?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
-          <div class="qa-a"><p>Only if it refused the bad objections and accepted the good ones. It refused both at about the same rate: 5 of 701 correct objections followed, 6 of 1,355 misleading. And it ignored atlas numbers from a reviewer that it used well as evidence (49 of 70 right).</p></div>
+          <div class="qa-a"><p>Only if it refused the bad objections and accepted the good ones. It refused both at about the same rate: 5 of 701 correct objections followed, 6 of 1,355 misleading. And the atlas comparison that fixed 56 of 70 wrong answers when a senior PI shared it fixed 27 of 69 when the same PI argued with it.</p></div>
         </details>
         <details class="qa" data-rule>
           <summary><span>So this is the opposite of sycophancy?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
           <div class="qa-a"><p>In this setting, yes. A neutral "please double-check" changed 13% of answers, an objection 1% (difference 12.3 points, 95% CI 5.5 to 19.8). Disagreement made the model entrench rather than defer.</p></div>
         </details>
         <details class="qa" data-rule>
-          <summary><span>Why would the messenger matter?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
-          <div class="qa-a"><p>We do not know. The API returns no reasoning text, only a token count, so the mechanism is untested. One guess is that training against sycophancy taught the model to treat claims inside a user turn as suspect, whatever their content.</p></div>
+          <summary><span>Is it the person, or having already answered?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
+          <div class="qa-a"><p>Neither. We first thought the model distrusted the messenger, then tested it: after the first answer, the identical atlas text fixed 71% of wrong answers as a pipeline result and 80% from a senior PI, but 41% inside a dispute. Why disagreement costs so much we cannot see: the API returns no reasoning text. One guess is that training against sycophancy taught the model to resist claims in a user turn, whatever their content.</p></div>
         </details>
         <details class="qa" data-rule>
           <summary><span>How far does this generalise?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
@@ -491,7 +491,7 @@
         </details>
         <details class="qa" data-rule>
           <summary><span>Can I reproduce it?</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></summary>
-          <div class="qa-a"><p>Yes. Every prompt and raw response is committed, and a response cache makes reruns free. The full study cost $7.73 in API calls; 80 offline tests cover prompts, leakage, parsing and statistics.</p></div>
+          <div class="qa-a"><p>Yes. Every prompt and raw response is committed, and a response cache makes reruns free. The full study cost $8.10 in API calls; 85 offline tests cover prompts, leakage, parsing and statistics.</p></div>
         </details>
       </div>
     </div>
@@ -508,7 +508,7 @@
       <div class="contact-card">
         <dl class="contact-list">
           <div><dt>Report</dt><dd><a class="tlink" href="../docs/REPORT.pdf">REPORT.pdf</a></dd></div>
-          <div><dt>Conversations</dt><dd><a class="tlink" href="explorer.html#conversations">All 2,906 answers</a></dd></div>
+          <div><dt>Conversations</dt><dd><a class="tlink" href="explorer.html#conversations">All 3,294 answers</a></dd></div>
           <div><dt>Sprint</dt><dd>Apart Research, AI x Epistemics, Track 1, November 2026</dd></div>
           <div><dt>Data</dt><dd>BBBC021, MCF-7 (Caie et al., 2010; Ljosa et al., 2012, 2013)</dd></div>
         </dl>
@@ -558,7 +558,7 @@
     </div>
     <div class="foot-base">
       <p class="chip"><span class="chip-k">© 2026</span><span class="chip-v">Oleksandra · Apart Research sprint</span></p>
-      <p class="chip"><span class="chip-k">Measured</span><span class="chip-v">in 2,907 calls and $7.73</span></p>
+      <p class="chip"><span class="chip-k">Measured</span><span class="chip-v">in 3,295 calls and $8.10</span></p>
     </div>
     <p class="foot-legal">A weekend research sprint: two models from one family, one task, 38 compounds. Read the results as a case study. Evidence was replayed from MuseCell, the author's earlier project, used read-only as a data source. Pictures marked schematic are drawn in code and are not real microscopy; panels marked real data are computed from the runs. Page design: Corvel Hard-Tech Capital Page by INSTALANDING.AI (MIT).</p>
   </div>

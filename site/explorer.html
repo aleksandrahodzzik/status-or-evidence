@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Status or Evidence? An AI scientist that cannot be argued with</title>
+<title>Status or Evidence? An AI scientist that takes data, not arguments</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
     <a href="index.html">Overview</a>
     <a href="#experiment">Experiment</a>
     <a href="#conditions">Results</a>
-    <a href="#messenger">Messenger</a>
+    <a href="#messenger">Shared or argued</a>
     <a href="#conversations">Conversations</a>
     <a href="#method">Method</a>
     <a class="btn-pill" href="../docs/REPORT.pdf" target="_blank">Report PDF</a>
@@ -24,19 +24,20 @@
 <header class="hero" id="top">
   <div class="hero-inner">
     <p class="eyebrow">Apart Research · AI x Epistemics Sprint · Track 1</p>
-    <h1>An AI scientist that<br><span class="grad">cannot be argued with</span></h1>
+    <h1>An AI scientist that takes<br><span class="grad">data, not arguments</span></h1>
     <p class="lede">When a reviewer challenges an AI scientist, does it update because of <b>who</b> is speaking or
-      because of <b>what</b> they show? We replayed real lab evidence and pushed back 2,900 times, with senior and
-      junior reviewers, right and wrong, with and without evidence.</p>
+      because of <b>what</b> they show? We replayed real lab evidence and sent 3,028 second messages: senior and
+      junior reviewers, right and wrong, with and without evidence, and the same data with no argument at all.</p>
     <div class="stats">
       <div class="stat reveal">
-        <div class="stat-num"><span data-count="0">0</span><span class="of">/139</span></div>
-        <div class="stat-label">wrong answers corrected when a reviewer quoted the reference atlas, even with the
-          numbers on the reviewer's side</div>
+        <div class="stat-num"><span data-count="56">0</span><span class="of">/70</span></div>
+        <div class="stat-label">wrong answers fixed when a senior PI simply <i>shared</i> the reference-atlas
+          comparison after the first answer</div>
       </div>
       <div class="stat reveal">
-        <div class="stat-num"><span data-count="49">0</span><span class="of">/70</span></div>
-        <div class="stat-label">correct on the same compounds when the same atlas came in as <i>data</i></div>
+        <div class="stat-num"><span data-count="27">0</span><span class="of">/69</span></div>
+        <div class="stat-label">fixed when the same PI <i>disputed</i> with the identical comparison; with two quoted
+          atlas numbers, 0 of 139</div>
       </div>
       <div class="stat reveal">
         <div class="stat-num"><span data-count="1">0</span><span class="of">%</span> <span class="vs">vs</span>
@@ -87,7 +88,7 @@
 <section id="conditions" class="section alt">
   <div class="wrap">
     <p class="kicker">Results</p>
-    <h2>Neither status nor evidence moves it</h2>
+    <h2>Objections barely move it, whoever makes them</h2>
     <p class="sub">Share of answers that switched to the reviewer's suggestion, per condition, with 95% intervals.
       The dashed line is how often a neutral "please double-check" changed the answer.</p>
     <div class="controls">
@@ -130,13 +131,17 @@
 <section id="messenger" class="section dark">
   <div class="wrap">
     <p class="kicker light">The headline</p>
-    <h2>Same source, different messenger</h2>
+    <h2>Same data, shared or argued</h2>
     <p class="sub light">70 cases where the model was wrong without the atlas, and the atlas pointed to the truth.
-      When the atlas was part of the evidence, it got most of them right. When a reviewer quoted the atlas, it fixed
-      none.</p>
+      After its answer we sent the identical atlas comparison in four ways. As data, from a pipeline or a senior PI,
+      it fixed most of them. Inside "I disagree, I think it is X" it fixed fewer than half, and two quoted numbers
+      fixed none. A follow-up added after the main results, with its analysis fixed before the first call.</p>
     <div class="messenger" id="messenger-chart"></div>
-    <blockquote class="quote reveal">"one black-box similarity cannot outweigh this coherent phenotype"
-      <cite>model, after a senior PI quoted similarity 0.74 for the true class vs 0.10 for its answer</cite>
+    <blockquote class="quote reveal">"Atlas NSC 4/4 votes Protein degradation with top sims 0.44-0.49 vs 0.28 for stabilizers."
+      <cite>model, after the pipeline sent the atlas comparison: switched to the true class</cite>
+    </blockquote>
+    <blockquote class="quote reveal">"…Atlas sims ~0.49 are weak and outweighed by direct tubulin-specific phenotype."
+      <cite>same compound and seed, after a senior PI disputed with the identical comparison: kept its wrong answer</cite>
     </blockquote>
   </div>
 </section>
@@ -154,7 +159,10 @@
         <label>Compound<select id="f-compound"></select></label>
         <label>Seed<select id="f-seed"></select></label>
         <label class="wide">Reviewer<select id="f-cond"></select></label>
-        <button class="btn" id="btn-striking">Show a striking case</button>
+        <div class="btns">
+          <button class="btn" id="btn-striking">Show a striking case</button>
+          <button class="btn btn-alt" id="btn-framing">Same data: argued, then shared</button>
+        </div>
       </div>
       <div class="chat" id="chat"></div>
     </div>
@@ -174,11 +182,11 @@
       <div class="card mini"><h4>Atlas evidence</h4><p>Cosine similarity of the nearest annotated reference of the
         target class vs the model's class, quoted truthfully in both directions.</p></div>
       <div class="card mini"><h4>Sampling</h4><p>Temperature 0.7, seeds 0/1/2 (one seed for muse-spark-1.3), 8,000
-        max tokens including reasoning. 2,907 calls, 0 API errors, $7.73.</p></div>
+        max tokens including reasoning. 3,295 calls, 0 API errors, $8.10.</p></div>
       <div class="card mini"><h4>Statistics</h4><p>Wilson 95% intervals for rates; cluster bootstrap over compounds
         for contrasts (2,000 resamples).</p></div>
       <div class="card mini"><h4>Reproducible</h4><p>Every prompt and raw response is committed; the response cache
-        makes reruns free. 80 offline tests.</p></div>
+        makes reruns free. 85 offline tests.</p></div>
     </div>
   </div>
 </section>
