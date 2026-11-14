@@ -6,7 +6,9 @@ objection from a misleading one?
 
 Live: [overview](https://aleksandrahodzzik.github.io/status-or-evidence/) ·
 [conversation explorer](https://aleksandrahodzzik.github.io/status-or-evidence/site/explorer.html) ·
-[report (PDF)](docs/REPORT.pdf)
+[report (PDF)](docs/REPORT.pdf) ·
+[one-page brief](docs/JUDGE.pdf) ·
+[90-second script](docs/VIDEO.md)
 
 **Main result.** Objections are almost never followed, right or wrong, from a senior PI or a junior (5 of 701
 correct and 6 of 1,355 misleading). The same atlas comparison fixes 71-80% of wrong answers when given as data after

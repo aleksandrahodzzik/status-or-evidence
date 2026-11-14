@@ -74,7 +74,14 @@ def main(argv: list[str] | None = None) -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     for i, run in enumerate(argv):
         an = json.loads((Path(run) / "analysis.json").read_text(encoding="utf-8"))
-        print(f"-> {fig_follow(an, 'primary' if i == 0 else 'secondary').relative_to(ROOT)}")
+        run_name = Path(run).name
+        if "ember" in run_name:
+            label = "ember"
+        elif "muse-spark-1.3_" in run_name:
+            label = "secondary"
+        else:
+            label = "primary" if i == 0 else "secondary"
+        print(f"-> {fig_follow(an, label).relative_to(ROOT)}")
     return 0
 
 

@@ -38,22 +38,28 @@ em { color: #333; }
 """
 
 
-def main() -> int:
-    md = (DOCS / "REPORT.md").read_text(encoding="utf-8")
+def build(stem: str, edge: str, extra_css: str = "") -> Path:
+    md = (DOCS / f"{stem}.md").read_text(encoding="utf-8")
     body = markdown.markdown(md, extensions=["tables", "fenced_code"])
     html = (f"<!doctype html><html><head><meta charset='utf-8'><title>Status or Evidence?</title>"
-            f"<style>{CSS}</style></head><body>{body}</body></html>")
-    html_path = DOCS / "REPORT.html"
+            f"<style>{CSS}{extra_css}</style></head><body>{body}</body></html>")
+    html_path = DOCS / f"{stem}.html"
     html_path.write_text(html, encoding="utf-8")
-    edge = next((p for p in EDGE_CANDIDATES if p.exists()), None) or shutil.which("msedge")
-    if not edge:
-        print("Microsoft Edge not found; open docs/REPORT.html and print to PDF")
-        return 1
-    pdf_path = DOCS / "REPORT.pdf"
-    subprocess.run([str(edge), "--headless", "--disable-gpu", "--no-pdf-header-footer",
+    pdf_path = DOCS / f"{stem}.pdf"
+    subprocess.run([edge, "--headless", "--disable-gpu", "--no-pdf-header-footer",
                     f"--print-to-pdf={pdf_path}", html_path.as_uri()], check=True, timeout=120,
                    capture_output=True)
     print(f"-> {pdf_path.relative_to(ROOT)} ({pdf_path.stat().st_size // 1024} KB)")
+    return pdf_path
+
+
+def main() -> int:
+    edge = next((str(p) for p in EDGE_CANDIDATES if p.exists()), None) or shutil.which("msedge")
+    if not edge:
+        print("Microsoft Edge not found; open docs/REPORT.html and print to PDF")
+        return 1
+    build("REPORT", edge)
+    build("JUDGE", edge, "h1{font-size:16pt} p,li{font-size:10pt} img{max-height:300px;width:auto;margin-left:0}")
     return 0
 
 

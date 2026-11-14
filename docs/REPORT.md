@@ -3,7 +3,7 @@
 **Oleksandra**, Independent researcher
 
 *Apart Research "AI x Epistemics" Research Sprint, November 13-15, 2026. Track 1: Model Epistemics &
-Decision-Making Evals.*
+Decision-Making Evals. One-page brief: [JUDGE.pdf](JUDGE.pdf).*
 
 ## Abstract
 
@@ -18,10 +18,9 @@ evidence had no measurable effect, and objections cut answer changes from 13% (c
 replicates this. A pre-specified follow-up (388 calls) locates the barrier. On 70 cases where the model was wrong
 and the atlas favoured the truth, the same atlas text, given after the first answer, corrected 71% as a tool result
 and 80% when a senior PI simply shared it, matching first-turn evidence (70%). Inside an objection ("I disagree; I
-think the MoA is X") it corrected 41%, and objections quoting two of its numbers corrected **0 of 139**. The model
-is neither attached to its answer nor dismissive of people: it discounts evidence framed as disagreement, and
-discards thin evidence so framed entirely. A correct reviewer who argues is less effective than one who just
-shows the data.
+think the MoA is X") it corrected 41%, and objections quoting two of its numbers corrected **0 of 139**. It
+discounts evidence framed as disagreement and discards thin evidence so framed. A reviewer who argues is less
+effective than one who shows the data.
 
 ## 1. Introduction
 
@@ -194,15 +193,6 @@ Its rebuttals have the same shape; with atlas similarities 0.75 (target) vs 0.13
 
 *Figure 2. As Figure 1, for `muse-spark-1.3` (one seed, so intervals are wider).*
 
-### 4.8 A second Muse model
-
-`muse-ember-1.0`, one seed, without the atlas, all 13 conditions. Turn-1 accuracy is 10/32 = 31% [18, 49] (6
-unparsed). It followed 5 of 121 correct objections (4%, [2, 9]) and 3 of 187 misleading ones (2%, [1, 5]). Senior
-minus junior follow rate: +0.1 points [-2.6, +2.6]. The "almost never follows, and status does not matter" result
-is not specific to muse-spark. The entrenchment result does not replicate: a neutral "please double-check" changed 0 of 27 answers,
-while an objection changed 8 of 308 (control minus objection: -2.6 points [-5.5, -0.4]). The data-versus-disagreement
-follow-up on this model was stopped before it finished, so it is not reported.
-
 ### 4.7 Follow-up: the model updates on data, not on disagreement
 
 To separate timing, content and framing, we kept the committed turn-1 answers of the `no_nsc` run (served from
@@ -240,6 +230,19 @@ seed 0, true class Protein degradation, first answer Microtubule stabilizers):
 > tool: "Atlas NSC 4/4 votes Protein degradation with top sims 0.44-0.49 vs 0.28 for stabilizers."
 >
 > dispute, senior PI: "…Atlas sims ~0.49 are weak and outweighed by direct tubulin-specific phenotype."
+
+### 4.8 A second Muse model
+
+`muse-ember-1.0`, one seed, without the atlas, all 13 conditions. Turn-1 accuracy is 10/32 = 31% [18, 49] (6
+unparsed). It followed 5 of 121 correct objections (4%, [2, 9]) and 3 of 187 misleading ones (2%, [1, 5]). Senior
+minus junior follow rate: +0.1 points [-2.6, +2.6]. The low follow rate, and the irrelevance of status, are not
+specific to muse-spark. Entrenchment does not replicate: "please double-check" changed 0 of 27 answers, while an
+objection changed 8 of 308 (control minus objection: -2.6 points [-5.5, -0.4]). The data-versus-disagreement
+follow-up on this model was stopped before it finished, so it is not reported.
+
+![Ember follow rates](figures/ember_follow.png)
+
+*Figure 4. As Figure 1, for `muse-ember-1.0`, one seed, without the atlas.*
 
 ## 5. Discussion
 
@@ -290,6 +293,12 @@ All API responses are cached, so reruns cost $0 and reproduce the same records. 
 compound identity, targets, prompts (including identical atlas text across follow-up channels), parsing, caching,
 the budget kill switch and the analysis.
 
+## LLM Usage Statement
+
+The author set the research question, the design, the budget and the decision to publish, and approved every paid
+run. An AI coding assistant helped implement the harness, the site and drafts of this report. Every number above was
+recomputed from the committed raw records. The models under study were not used for writing.
+
 ## References
 
 - Ando, D. M., McLean, C. Y., & Berndl, M. (2017). Improving phenotypic measurements in high-content imaging
@@ -327,7 +336,9 @@ PI, and about half as many when framed as an objection.
 
 - Generality across model families, tasks, or longer and more conversational critique. The reviewer message is
   short and comes once.
-- The larger model was run on one variant and one seed only (90 correct-objection cells), and not in the follow-up.
+- The larger Spark model was run on one variant and one seed only (90 correct-objection cells), and not in the
+  follow-up. `muse-ember-1.0` is one seed without the atlas. It reproduces the low follow rate and the null effect
+  of status, and it does not reproduce entrenchment (Section 4.8). Its follow-up was stopped unfinished.
 - Which part of a dispute does the damage. A dispute adds both an explicit contrary claim and the framing of
   disagreement to the shared block; the follow-up does not separate them. Its targets are always the truth, so it
   measures uptake of correct evidence only, not credulity towards misleading data.
@@ -353,10 +364,6 @@ oversight, not a safety property.
 personal data are involved. Compound names were removed from prompts to prevent recall from memory. Calls to the
 contributor tier may be used by the provider for training; only public benchmark-derived content was sent. The API
 key was read from an environment variable at runtime and never logged or committed.
-
-**AI assistance.** The author set the research question, the design, the budget and the decision to publish, and
-approved every paid run. An AI coding assistant helped implement the harness, the site and drafts of this report.
-Every number above was recomputed from the committed raw records. The models under study were not used for writing.
 
 ## Appendix B. Exact prompts
 

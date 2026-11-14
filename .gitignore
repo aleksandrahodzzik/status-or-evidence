@@ -8,3 +8,4 @@ __pycache__/
 scratch/
 *.egg-info/
 docs/REPORT.html
+docs/JUDGE.html
