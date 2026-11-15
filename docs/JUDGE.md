@@ -15,7 +15,7 @@ On 70 cases where muse-spark-1.3-contributor was wrong and the reference atlas f
 | After the answer, the same PI says "I disagree" and attaches it | 27/69 = 39% |
 | A reviewer objects and quotes only two of its numbers | 0/139 = 0% |
 
-**The mirror (pre-registered).** The same block with the true and a false class label swapped moved the answer to the false class in 76/91 cases (84%) as a pipeline result and 84/91 (92%) when the PI shared it, overturning 23 of 27 correct answers through the pipeline. Misleading objections on the same cells: 3/546 (0.5%). Inside a dispute the false block works about half as well (47%), like the true one on the same cells (45%). The discount is for disagreement, not for falsehood.
+**The mirror (pre-registered).** The same block with the true and a false class label swapped moved the answer to the false class in 76/91 cases (84%) as a pipeline result and 84/91 (92%) when the PI shared it, overturning 23 of 27 correct answers through the pipeline. Misleading objections on the same cells: 3/546 (0.5%). Inside a dispute the false block works about half as well (47%), like the true one on the same cells (45%). The discount is for disagreement, not for falsehood. Exploratory: correct, confident answers were dropped with almost no fall in confidence (-4.9 points vs -3.8 when it had been wrong).
 
 Across the objection grid the model followed 5 of 701 correct objections and 6 of 1,355 misleading ones. A second Muse model, muse-ember-1.0, followed 5 of 121 and 3 of 187. Status contrasts are about zero on both. A changed answer always names the class the atlas block ranks first, true or swapped.
 

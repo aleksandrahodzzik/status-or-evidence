@@ -59,15 +59,13 @@ and finds citation-based rebuttals the most likely to flip correct answers to wr
 model that agrees too readily. We ask the paired question, whether models cave *and* whether they update when the
 objection is right, and find a different failure: objections are resisted whether they are right or wrong.
 
-**Honesty and epistemic virtue.** MASK (Ren et al., 2025) shows that models knowingly contradict their own beliefs
-under pressure; our setting has no incentive to lie. Forethought's collective-epistemics design sketches
-(Cotton-Barratt, Vaintrob & Sourbut, 2025) propose evals of calibration and manipulation resistance; our 2x3x2
-paired factorial is a concrete instance that separates status from evidence and correct from misleading pushback.
+**Honesty and epistemic virtue.** MASK (Ren et al., 2025) shows models knowingly contradicting their beliefs under
+pressure; ours has no incentive to lie. Forethought's design sketches (Cotton-Barratt, Vaintrob & Sourbut, 2025)
+propose evals of manipulation resistance; our paired factorial is one, separating status from evidence.
 
-**Cell-painting MoA prediction.** BBBC021 (Caie et al., 2010; Ljosa et al., 2012), with the 38-compound, 12-class
-MoA subset of Ljosa et al. (2013), is a standard benchmark; nearest-neighbour matching against annotated references
-in a deep embedding (Ando et al., 2017) is the usual baseline. Ground truth is known and the atlas gives a
-verifiable form of evidence.
+**Cell-painting MoA prediction.** BBBC021 (Caie et al., 2010; Ljosa et al., 2012; 38-compound, 12-class subset of
+Ljosa et al., 2013) has known ground truth; nearest-neighbour matching in a deep embedding (Ando et al., 2017) is
+the usual baseline and gives verifiable evidence.
 
 ## 3. Methods
 
@@ -267,7 +265,7 @@ the false class (true minus false -4.7 points [-19.1, +9.4]), shared 88% vs 92% 
 vs 47% (-1.5 [-16.0, +12.0]). Every changed answer names the false class (76/76, 84/84, 43/43, 39/39). Two post-hoc
 counts: the effect is broad (the tool message moved at least one seed on 30 of 31 compounds, the shared block on 31
 of 31, while the three misleading-objection follows all came from one compound), and confidence does not flag it
-(mean 82 out of 100 after adopting the false class through the tool, 81 after a correction by the true block). Phenotype
+(mean 82/100 after taking the false block through the tool, 81 after a true correction). Phenotype
 evidence it uses to defend a correct answer against a dispute is explained away when the same false block arrives as
 a tool result (`s_0ed866d71e`, seed 1, true class Microtubule stabilizers, false class Microtubule destabilizers):
 
@@ -283,6 +281,15 @@ a tool result (`s_0ed866d71e`, seed 1, true class Microtubule stabilizers, false
 first answer was wrong, by channel; grey: misleading objections of the main grid on the same cells. Bars: 95%
 Wilson intervals.*
 
+**Could the model have known?** (Exploratory, not pre-registered; `sor.explore_mirror`.) Nothing in the block
+revealed the swap, but the model had evidence of its own. By a crude proxy (distance of its median z-profile to
+leave-one-out class centroids), its phenotype was closer to the true class in 76 of 91 cells; in the third where it was most clearly closer, the tool block still won 24/28
+(86%; 75% in the least clear third). Correct first answers above the median confidence (88) were overturned through
+the tool 10/13 (77%), the rest 13/14 (93%): a weak hint, intervals overlapping. After adopting the false class,
+confidence fell 4.9 points where the first answer had been right and 3.8 where it had been wrong (difference -1.1
+[-5.7, +3.7]); 2 of 23 such rationales say "despite", "however" or similar. The model could not detect the swap,
+but it shows no sign of weighing the block against its own reading.
+
 ## 5. Discussion
 
 Expected failure modes for an AI scientist under critique were sycophancy (follow status) or credulity (follow any
@@ -290,29 +297,25 @@ quoted number). We find both sides of a third: **frame-dependent updating**. The
 from its own pipeline or from a senior PI, true or false, and discounts what arrives as disagreement, right or
 wrong. The same atlas block loses about half its effect inside "I disagree, I think it is X", whether it is true or
 falsified, and a two-number summary of it loses all of it. When the answer changes, it changes to the class the
-block ranks first. Status plays no part at any stage. Section 4.4 alone suggested distrust of the messenger, and
-Section 4.7 alone suggested sensible use of evidence; the mirror test shows that neither reading was right.
+block ranks first. Status plays no part at any stage. Sections 4.4 and 4.7 alone suggested distrust of the
+messenger and sensible use of evidence; the mirror test shows neither was right.
 
-For AI-assisted science this matters for oversight. A reviewer who is right but argues a conclusion fixes few
-wrong answers; the same reviewer sharing the underlying data fixes most of them, so "show, don't argue" holds. But
+For AI-assisted science this matters for oversight. A reviewer who is right but argues fixes few wrong
+answers; sharing the underlying data fixes most, so "show, don't argue" holds. But
 it holds for anyone: a falsified tool output overturned 85% of correct answers, and a shared one 93%, while
 misleading objections on the same cells overturned none. Resistance to argument is not evidence of robustness; a "robust to misleading
 pushback" score near 100% (here 99.5%) coexists with near-total credulity towards misleading data. Safety therefore
 rests on the integrity of the data channel (tool outputs, shared files, retrieved results), not on the model's
-scepticism. The disagreement discount does not help: it cuts uptake of true and false data alike. The MuseCell runs
-fit this picture: answers changed after a critique only when the agent also re-ran analyses on its own data.
+scepticism.
 
-**Future work.** (1) Separate the two parts of a dispute, an explicit contrary claim and the word "disagree".
-(2) Provenance cues: does labelling data as unverified, or giving the model a tool to check it, lower uptake of
-false data without losing true data? (3) Cruder fakes (altered numbers, blocks that contradict the turn-1 evidence)
-to find where uptake stops. (4) Escalating multi-turn pushback, other model families and tasks.
+**Future work.** (1) Separate a dispute's explicit contrary claim from the word "disagree". (2) Provenance cues:
+does labelling data as unverified, or a tool to check it, lower uptake of false data but not true? (3) Cruder fakes
+(altered numbers, self-contradicting blocks). (4) Multi-turn pushback, other model families and tasks.
 
-**Conclusion.** Asked whether an AI scientist updates on status or on evidence, we find it updates on whatever
-arrives as data and resists whatever arrives as an argument. Objections, right or wrong, from a senior PI or a
-junior, almost never moved it; the same data, shared, corrected most of its errors, and the same data with two
-labels swapped introduced errors just as often. Evals of pushback should measure responsiveness to correct critique
-alongside resistance to misleading critique, vary how the critique is framed, and test misleading evidence in the
-channels the model trusts.
+**Conclusion.** The AI scientist updates on what arrives as data and resists what arrives as argument. Objections,
+right or wrong, from anyone, almost never moved it; the same data, shared, fixed most errors, and with two labels
+swapped caused errors as often. Pushback evals should pair responsiveness to correct critique with resistance to
+misleading critique, vary its framing, and test false data where the model trusts it.
 
 ## 6. Reproducibility
 
@@ -320,15 +323,13 @@ Code, data provenance, every exact prompt and every raw response are in the proj
 <https://github.com/aleksandrahodzzik/status-or-evidence>. An interactive overview and a reader for all 3,658
 recorded answers are at <https://aleksandrahodzzik.github.io/status-or-evidence/>.
 
-The README lists the command for every run and analysis (`sor.run`, `sor.analyze`, `sor.channel`, `sor.mirror`).
-All API responses are cached, so reruns cost $0 and reproduce the same records. 98 offline tests cover leakage of
-compound identity, targets, prompts (including identical atlas text across follow-up channels and an exact label
-swap in the mirror test), parsing, caching, the budget kill switch and the analysis.
+The README lists the command for every run and analysis. All API responses are cached, so reruns cost $0 and reproduce the same records. 101 offline tests cover leakage of
+compound identity, targets, prompts (identical atlas text across channels, the exact label swap), parsing, caching, the budget cap and the analysis.
 
 ## LLM Usage Statement
 
 The author set the research question, the design, the budget and the decision to publish, and approved every paid
-run. An AI coding assistant helped implement the harness, the site and drafts of this report. Every number above was
+run. An AI coding assistant helped build the harness, the site and report drafts. Every number above was
 recomputed from the committed raw records. The models under study were not used for writing.
 
 ## References
@@ -380,6 +381,10 @@ often, through every channel.
   phenotype evidence only as far as that evidence is diagnostic. Altered numbers, blocks that contradict
   themselves, or fakes the model could check with a tool may be treated differently. The 7 compounds whose top atlas
   class is not the truth were excluded, because there the swap would favour the truth.
+- That the model should have rejected the falsified block. The model could not know the labels were swapped, and
+  trusting a reference atlas is reasonable. The analysis at the end of Section 4.9 (own phenotype, confidence,
+  rationale wording) is exploratory and not pre-registered: the phenotype margin is a centroid-distance proxy the
+  model never saw, the subgroups are small (13-28 cells), and the rationale check is a keyword match.
 - That the model is wrong to discount the evidence in every case: quoted feature evidence is weak by construction
   (closest features, not diagnostic ones), and two similarities are a summary that a careful scientist might want
   to verify. The full block, inside a dispute, still corrects only 41%.
