@@ -1,0 +1,283 @@
+{
+ "label": "exploratory, not pre-registered",
+ "conditions": [
+  "fake-tool",
+  "fake-share"
+ ],
+ "a_conflict_by_turn1_confidence": {
+  "n_cells": 27,
+  "turn1_confidence": {
+   "median": 88.0,
+   "min": 75,
+   "max": 96,
+   "mean": 89.1
+  },
+  "split": "low = turn-1 confidence <= median, high = > median",
+  "fake-tool": {
+   "low": {
+    "k": 13,
+    "n": 14,
+    "rate": 0.929,
+    "ci95": [
+     0.685,
+     0.987
+    ]
+   },
+   "high": {
+    "k": 10,
+    "n": 13,
+    "rate": 0.769,
+    "ci95": [
+     0.497,
+     0.918
+    ]
+   },
+   "turn1_conf_adopted": 88.9,
+   "turn1_conf_kept": 90.5
+  },
+  "fake-share": {
+   "low": {
+    "k": 14,
+    "n": 14,
+    "rate": 1.0,
+    "ci95": [
+     0.785,
+     1.0
+    ]
+   },
+   "high": {
+    "k": 11,
+    "n": 13,
+    "rate": 0.846,
+    "ci95": [
+     0.578,
+     0.957
+    ]
+   },
+   "turn1_conf_adopted": 88.9,
+   "turn1_conf_kept": 92.5
+  }
+ },
+ "b_confidence_change_adoptions": {
+  "fake-tool": {
+   "conflict": {
+    "n": 23,
+    "conf_turn1": 88.9,
+    "conf_turn2": 84.0,
+    "change": -4.9
+   },
+   "non_conflict": {
+    "n": 53,
+    "conf_turn1": 84.5,
+    "conf_turn2": 80.7,
+    "change": -3.8
+   },
+   "conflict_minus_non_conflict_change": {
+    "estimate": -1.077,
+    "ci95": [
+     -5.739,
+     3.697
+    ]
+   },
+   "conflict_minus_non_conflict_turn2_conf": {
+    "estimate": 3.326,
+    "ci95": [
+     0.251,
+     6.177
+    ]
+   }
+  },
+  "fake-share": {
+   "conflict": {
+    "n": 25,
+    "conf_turn1": 88.9,
+    "conf_turn2": 84.0,
+    "change": -4.9
+   },
+   "non_conflict": {
+    "n": 59,
+    "conf_turn1": 85.1,
+    "conf_turn2": 83.0,
+    "change": -2.1
+   },
+   "conflict_minus_non_conflict_change": {
+    "estimate": -2.744,
+    "ci95": [
+     -6.819,
+     1.286
+    ]
+   },
+   "conflict_minus_non_conflict_turn2_conf": {
+    "estimate": 1.0,
+    "ci95": [
+     -1.343,
+     3.584
+    ]
+   }
+  },
+  "data_pooled": {
+   "conflict": {
+    "n": 48,
+    "conf_turn1": 88.9,
+    "conf_turn2": 84.0,
+    "change": -4.9
+   },
+   "non_conflict": {
+    "n": 112,
+    "conf_turn1": 84.8,
+    "conf_turn2": 81.9,
+    "change": -2.9
+   },
+   "conflict_minus_non_conflict_change": {
+    "estimate": -1.955,
+    "ci95": [
+     -6.148,
+     2.474
+    ]
+   },
+   "conflict_minus_non_conflict_turn2_conf": {
+    "estimate": 2.101,
+    "ci95": [
+     -0.416,
+     4.806
+    ]
+   }
+  }
+ },
+ "c_phenotype_margin": {
+  "n_cells": 91,
+  "cut_points": [
+   9.56,
+   34.04
+  ],
+  "share_cells_margin_positive": {
+   "k": 76,
+   "n": 91,
+   "rate": 0.835,
+   "ci95": [
+    0.746,
+    0.897
+   ]
+  },
+  "margin_range": [
+   -40.0,
+   92.83
+  ],
+  "fake-tool": {
+   "low": {
+    "k": 24,
+    "n": 32,
+    "rate": 0.75,
+    "ci95": [
+     0.579,
+     0.867
+    ]
+   },
+   "mid": {
+    "k": 28,
+    "n": 31,
+    "rate": 0.903,
+    "ci95": [
+     0.751,
+     0.967
+    ]
+   },
+   "high": {
+    "k": 24,
+    "n": 28,
+    "rate": 0.857,
+    "ci95": [
+     0.685,
+     0.943
+    ]
+   },
+   "high_turn1_right": {
+    "k": 17,
+    "n": 21,
+    "rate": 0.81,
+    "ci95": [
+     0.6,
+     0.923
+    ]
+   }
+  },
+  "fake-share": {
+   "low": {
+    "k": 28,
+    "n": 32,
+    "rate": 0.875,
+    "ci95": [
+     0.719,
+     0.95
+    ]
+   },
+   "mid": {
+    "k": 30,
+    "n": 31,
+    "rate": 0.968,
+    "ci95": [
+     0.838,
+     0.994
+    ]
+   },
+   "high": {
+    "k": 26,
+    "n": 28,
+    "rate": 0.929,
+    "ci95": [
+     0.774,
+     0.98
+    ]
+   },
+   "high_turn1_right": {
+    "k": 19,
+    "n": 21,
+    "rate": 0.905,
+    "ci95": [
+     0.711,
+     0.973
+    ]
+   }
+  }
+ },
+ "d_rationale_conflict_keywords": {
+  "keywords": [
+   "despite",
+   "conflict",
+   "inconsist",
+   "although",
+   "however",
+   "contradict",
+   "but"
+  ],
+  "note": "crude keyword match on the rationale field",
+  "fake-tool_adoptions": {
+   "k": 8,
+   "n": 76,
+   "rate": 0.105,
+   "ci95": [
+    0.054,
+    0.194
+   ]
+  },
+  "conflict_cells": {
+   "k": 2,
+   "n": 23,
+   "rate": 0.087,
+   "ci95": [
+    0.024,
+    0.268
+   ]
+  },
+  "non_conflict_cells": {
+   "k": 6,
+   "n": 53,
+   "rate": 0.113,
+   "ci95": [
+    0.053,
+    0.226
+   ]
+  }
+ },
+ "run": "mirror_muse-spark-1.3-contributor_no_nsc_20261114T123235-661520Z"
+}
