@@ -1,11 +1,12 @@
-# Status or Evidence? An AI scientist that takes data, not arguments
+<div class="titleblock">
+<h1 class="title">Status or Evidence? An AI scientist that takes data, not arguments<sup>1</sup></h1>
+<div class="authors"><div>Oleksandra Khodzinska<br>Independent researcher</div></div>
+<div class="with"><b>With</b><br>Apart Research</div>
+</div>
 
-**Oleksandra Khodzinska**, Independent researcher
+<h2 class="abstract-h">Abstract</h2>
 
-*Apart Research "AI x Epistemics" Research Sprint, November 13-15, 2026. Track 1: Model Epistemics &
-Decision-Making Evals. One-page brief: [JUDGE.pdf](JUDGE.pdf).*
-
-## Abstract
+<div class="abstract" markdown="1">
 
 When a reviewer challenges an AI scientist, does it update because of who the reviewer is (status) or what the
 reviewer shows (evidence)? We replay recorded evidence from MuseCell, an agentic cell-painting project (BBBC021:
@@ -21,6 +22,10 @@ discernment. With the true and a false class label swapped in the same block, th
 **84%** of cases as a tool result (overturning 23 of 27 correct answers) and 92% when shared, against 0.5% for
 misleading objections. It discounts disagreement, not falsehood: it takes data, true or false, and resists
 arguments, right or wrong.
+
+</div>
+
+<div class="fn"><sup>1</sup> Research conducted at the AI x Epistemics Research Sprint (Apart Research), November 2026. Track 1: Model Epistemics &amp; Decision-Making Evals. One-page brief: <a href="https://aleksandrahodzzik.github.io/status-or-evidence/docs/JUDGE.pdf">JUDGE.pdf</a>.</div>
 
 ## 1. Introduction
 
@@ -290,7 +295,7 @@ confidence fell 4.9 points where the first answer had been right and 3.8 where i
 [-5.7, +3.7]); 2 of 23 such rationales say "despite", "however" or similar. The model could not detect the swap,
 but it shows no sign of weighing the block against its own reading.
 
-## 5. Discussion
+## 5. Discussion and Limitations
 
 Expected failure modes for an AI scientist under critique were sycophancy (follow status) or credulity (follow any
 quoted number). We find both sides of a third: **frame-dependent updating**. The model takes what arrives as data,
@@ -308,29 +313,36 @@ pushback" score near 100% (here 99.5%) coexists with near-total credulity toward
 rests on the integrity of the data channel (tool outputs, shared files, retrieved results), not on the model's
 scepticism.
 
-**Future work.** (1) Separate a dispute's explicit contrary claim from the word "disagree". (2) Provenance cues:
+### Limitations
+
+One model family, one task, one short scripted critique. The fake data are one kind (two labels swapped, every
+number real). A dispute mixes an explicit contrary claim with the word "disagree". Whether the model could have
+detected the falsification is examined only exploratorily. Appendix A states what the results do and do not
+establish, and the dual-use considerations.
+
+### Future Work
+
+(1) Separate a dispute's explicit contrary claim from the word "disagree". (2) Provenance cues:
 does labelling data as unverified, or a tool to check it, lower uptake of false data but not true? (3) Cruder fakes
 (altered numbers, self-contradicting blocks). (4) Multi-turn pushback, other model families and tasks.
 
-**Conclusion.** The AI scientist updates on what arrives as data and resists what arrives as argument. Objections,
+## 6. Conclusion
+
+The AI scientist updates on what arrives as data and resists what arrives as argument. Objections,
 right or wrong, from anyone, almost never moved it; the same data, shared, fixed most errors, and with two labels
 swapped caused errors as often. Pushback evals should pair responsiveness to correct critique with resistance to
 misleading critique, vary its framing, and test false data where the model trusts it.
 
-## 6. Reproducibility
+## Code and Data
 
-Code, data provenance, every exact prompt and every raw response are in the project repository,
-<https://github.com/aleksandrahodzzik/status-or-evidence>. An interactive overview and a reader for all 3,658
-recorded answers are at <https://aleksandrahodzzik.github.io/status-or-evidence/>.
-
-The README lists the command for every run and analysis. All API responses are cached, so reruns cost $0 and reproduce the same records. 101 offline tests cover leakage of
-compound identity, targets, prompts (identical atlas text across channels, the exact label swap), parsing, caching, the budget cap and the analysis.
-
-## LLM Usage Statement
-
-The author set the research question, the design, the budget and the decision to publish, and approved every paid
-run. An AI coding assistant helped build the harness, the site and report drafts. Every number above was
-recomputed from the committed raw records. The models under study were not used for writing.
+- **Code repository:** <https://github.com/aleksandrahodzzik/status-or-evidence>: harness, every exact prompt, every
+  raw response, analyses, and the command for every run in the README. All API responses are cached, so reruns cost
+  $0 and reproduce the same records. 101 offline tests cover leakage of compound identity, targets, prompts
+  (identical atlas text across channels, the exact label swap), parsing, caching, the budget cap and the analysis.
+- **Data:** public BBBC021 images and derived features (Caie et al., 2010; Ljosa et al., 2012), copied read-only
+  from MuseCell with sha256 hashes (`data/PROVENANCE.md`).
+- **Other artifacts:** overview and a reader for all 3,658 recorded answers,
+  <https://aleksandrahodzzik.github.io/status-or-evidence/>.
 
 ## References
 
@@ -456,3 +468,9 @@ unchanged) and, in the dispute, ⟨truth⟩ replaced by the misleading target.
 ![Ember follow rates](figures/ember_follow.png)
 
 *Figure 5. As Figure 1, for `muse-ember-1.0` (without atlas, one seed).*
+
+## LLM Usage Statement
+
+The author set the research question, the design, the budget and the decision to publish, and approved every paid
+run. An AI coding assistant helped build the harness, the site and report drafts. Every number above was
+recomputed from the committed raw records. The models under study were not used for writing.
