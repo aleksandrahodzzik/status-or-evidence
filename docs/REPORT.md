@@ -106,7 +106,7 @@ phrase.
 calls, 2,284 turn-2 calls, 0 API errors, 6 unparsed answers. Replication with the larger `muse-spark-1.3`
 (`with_nsc` only, seed 0, all 13 conditions): 38 turn-1 and 356 turn-2 calls, 0 errors, 0 unparsed. Follow-up
 (Section 4.7): 388 turn-2 calls on the cached primary turn-1 answers, 0 errors, 2 unparsed. Mirror test
-(Section 4.9): 364 turn-2 calls, 0 errors, 6 unparsed. `muse-ember-1.0` (Section 4.8): the 13 conditions, `no_nsc`,
+(Section 4.8): 364 turn-2 calls, 0 errors, 6 unparsed. `muse-ember-1.0` (Appendix C): the 13 conditions, `no_nsc`,
 seed 0, 0 errors, 6 unparsed turn-1 answers. Unparsed answers are excluded from every rate. Total API spend,
 including probe, pilot and dry run: $9.43.
 
@@ -115,7 +115,7 @@ bootstrap over compounds (2,000 resamples; compounds are the unit, seeds and con
 
 **Deviation from plan.** The atlas evidence level was added after the first full run showed almost no updating, to
 test whether the null was due to weak evidence. The nine original conditions are unchanged (identical prompts,
-answers served from cache). The follow-up (Section 4.7) and the mirror test (Section 4.9) were designed after
+answers served from cache). The follow-up (Section 4.7) and the mirror test (Section 4.8) were designed after
 seeing the earlier results; their conditions, cells, hypotheses and contrasts were committed before their first
 calls (`afab7f3`; `ab9e1e5` with `docs/PREREG_MIRROR.md`).
 
@@ -176,17 +176,12 @@ re-sampling, not improvement. Any objection reduced changes to about 1% (control
 [5.5, 19.8] with atlas, +4.9 [1.3, 9.3] without). Among wrong turn-1 answers, a correct objection with atlas
 evidence corrected 13.4 points [2.9, 27.5] fewer than "double-check".
 
-### 4.6 Replication: muse-spark-1.3
+### 4.6 Replications on two further models
 
-The larger model is about as accurate at turn 1 (23/38 = 60%, 45-74%) and just as immovable:
-
-| | control: answer changed | objection: answer changed | correct objection followed | misleading objection followed |
-|---|---|---|---|---|
-| muse-spark-1.3, with atlas | 6/38 = 16% [7, 30] (3 W→R, 2 R→W, 1 W→W) | 1/318 = 0.3% [0.1, 1.8] | 1/90 = 1.1% [0.2, 6.0] | 0/228 = 0% [0, 1.7] |
-
-Control minus objection change rate: +15.5 points [5.3, 28.3]. The single follow was a senior-PI atlas objection.
-Its rebuttals have the same shape; with atlas similarities 0.75 (target) vs 0.13 (its answer): "Cholesterol
-embedding reflects morphology confound, not mechanism." Per-condition rates: Figure 4 in Appendix C.
+The pattern is not specific to one model. The larger `muse-spark-1.3` (with atlas, one seed) followed 1 of 90
+correct objections and 0 of 228 misleading ones; `muse-ember-1.0` (without atlas, one seed) followed 5 of 121 and
+3 of 187, senior minus junior +0.1 points [-2.6, +2.6]. Entrenchment replicates on `muse-spark-1.3` (control minus
+objection +15.5 points [5.3, 28.3]) but not on `muse-ember-1.0`. Details and per-condition rates: Appendix C.
 
 ### 4.7 Follow-up: the model updates on data, not on disagreement
 
@@ -233,16 +228,7 @@ by frame (`s_1ebd5529df`, seed 0, true class Protein degradation, first answer M
 >
 > dispute, senior PI: "…Atlas sims ~0.49 are weak and outweighed by direct tubulin-specific phenotype."
 
-### 4.8 A second Muse model
-
-`muse-ember-1.0`, one seed, without the atlas, all 13 conditions. Turn-1 accuracy is 10/32 = 31% [18, 49] (6
-unparsed). It followed 5 of 121 correct objections (4%, [2, 9]) and 3 of 187 misleading ones (2%, [1, 5]); senior
-minus junior: +0.1 points [-2.6, +2.6]. The low follow rate and the irrelevance of status are not specific to
-muse-spark. Entrenchment does not replicate: "please double-check" changed 0 of 27 answers, an objection 8 of 308
-(control minus objection: -2.6 points [-5.5, -0.4]). Its follow-up was stopped unfinished and is not reported.
-Per-condition rates: Figure 5 in Appendix C.
-
-### 4.9 Misleading data through the data channel
+### 4.8 Misleading data through the data channel
 
 Is the uptake in Section 4.7 discernment or credulity? A pre-registered mirror test (`docs/PREREG_MIRROR.md`,
 committed before any call) answers it. In each compound's real atlas block we swapped the labels of the true MoA
@@ -384,7 +370,7 @@ often, through every channel.
   short and comes once.
 - The larger Spark model was run on one variant and one seed only (90 correct-objection cells), and in neither
   follow-up. `muse-ember-1.0` is one seed without the atlas. It reproduces the low follow rate and the null effect
-  of status, and it does not reproduce entrenchment (Section 4.8). Its follow-up was stopped unfinished. The mirror
+  of status, and it does not reproduce entrenchment (Appendix C). Its follow-up was stopped unfinished. The mirror
   test was run on the primary model only.
 - Which part of a dispute does the damage. A dispute adds both an explicit contrary claim and the framing of
   disagreement to the shared block; neither follow-up separates them.
@@ -394,7 +380,7 @@ often, through every channel.
   themselves, or fakes the model could check with a tool may be treated differently. The 7 compounds whose top atlas
   class is not the truth were excluded, because there the swap would favour the truth.
 - That the model should have rejected the falsified block. The model could not know the labels were swapped, and
-  trusting a reference atlas is reasonable. The analysis at the end of Section 4.9 (own phenotype, confidence,
+  trusting a reference atlas is reasonable. The analysis at the end of Section 4.8 (own phenotype, confidence,
   rationale wording) is exploratory and not pre-registered: the phenotype margin is a centroid-distance proxy the
   model never saw, the subgroups are small (13-28 cells), and the rationale check is a keyword match.
 - That the model is wrong to discount the evidence in every case: quoted feature evidence is weak by construction
@@ -455,15 +441,32 @@ similarities, and classes among neighbours).
 - dispute: ⟨who⟩ = senior PI or junior reviewer, ⟨comment⟩ = "I disagree with your conclusion. I think the MoA is
   ⟨truth⟩. Here is the reference-atlas comparison for this compound's acquired wells: ⟨block⟩".
 
-**Mirror test turn 2 (Section 4.9).** The same three templates, word for word, with ⟨block⟩ replaced by the
+**Mirror test turn 2 (Section 4.8).** The same three templates, word for word, with ⟨block⟩ replaced by the
 falsified block (the true MoA and the misleading target swapped everywhere as whole class names, numbers
 unchanged) and, in the dispute, ⟨truth⟩ replaced by the misleading target.
 
-## Appendix C. Per-condition follow rates of the replications
+## Appendix C. Replications on two further models
+
+**muse-spark-1.3.** The larger model is about as accurate at turn 1 (23/38 = 60%, 45-74%) and just as immovable:
+
+| | control: answer changed | objection: answer changed | correct objection followed | misleading objection followed |
+|---|---|---|---|---|
+| muse-spark-1.3, with atlas | 6/38 = 16% [7, 30] (3 W→R, 2 R→W, 1 W→W) | 1/318 = 0.3% [0.1, 1.8] | 1/90 = 1.1% [0.2, 6.0] | 0/228 = 0% [0, 1.7] |
+
+Control minus objection change rate: +15.5 points [5.3, 28.3]. The single follow was a senior-PI atlas objection.
+Its rebuttals have the same shape; with atlas similarities 0.75 (target) vs 0.13 (its answer): "Cholesterol
+embedding reflects morphology confound, not mechanism." Per-condition rates: Figure 4.
 
 ![Replication](figures/secondary_follow.png)
 
 *Figure 4. As Figure 1, for `muse-spark-1.3` (with atlas, one seed, so intervals are wider).*
+
+**muse-ember-1.0.** `muse-ember-1.0`, one seed, without the atlas, all 13 conditions. Turn-1 accuracy is 10/32 = 31% [18, 49] (6
+unparsed). It followed 5 of 121 correct objections (4%, [2, 9]) and 3 of 187 misleading ones (2%, [1, 5]); senior
+minus junior: +0.1 points [-2.6, +2.6]. The low follow rate and the irrelevance of status are not specific to
+muse-spark. Entrenchment does not replicate: "please double-check" changed 0 of 27 answers, an objection 8 of 308
+(control minus objection: -2.6 points [-5.5, -0.4]). Its follow-up was stopped unfinished and is not reported.
+Per-condition rates: Figure 5.
 
 ![Ember follow rates](figures/ember_follow.png)
 

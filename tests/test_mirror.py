@@ -178,7 +178,7 @@ def _load(run):
 
 
 def test_mirror_numbers_in_the_report():
-    """Locked to the committed mirror run: every number of Section 4.9."""
+    """Locked to the committed mirror run: every number of Section 4.8."""
     res = mirror.analyse(_load(MIRROR), _load(CHANNEL), _load(FULL))
     assert "warning_targets" not in res
     assert (res["cells"], res["compounds"], res["turn1_wrong_cells"], res["unparsed"]) == (91, 31, 64, 6)
@@ -213,7 +213,7 @@ def test_mirror_every_changed_answer_names_the_false_class():
 
 
 def test_mirror_post_hoc_spread_and_confidence():
-    """Section 4.9 post-hoc counts: compounds moved per channel and mean confidence (locked to committed runs)."""
+    """Section 4.8 post-hoc counts: compounds moved per channel and mean confidence (locked to committed runs)."""
     t2 = [r for r in _load(MIRROR) if r["turn"] == 2 and r["status"] == "ok" and r.get("moa")]
     by = {}
     for r in t2:
